@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Easy Noise</string>
+    <string name="channel_name">Easy Noise</string>
+    <string name="channel_description">Controller notification for Easy Noise</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+</resources>

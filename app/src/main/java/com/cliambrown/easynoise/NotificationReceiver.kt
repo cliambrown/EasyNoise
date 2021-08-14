@@ -14,7 +14,7 @@ class NotificationReceiver : BroadcastReceiver() {
             return
         }
         val action = intent.action
-        if (action !== PLAY && action !== PAUSE) {
+        if (action !== PLAY && action !== PAUSE && action !== DISMISS) {
             return
         }
         val intent = Intent(context, PlayerService::class.java)
@@ -24,10 +24,5 @@ class NotificationReceiver : BroadcastReceiver() {
         } else {
             context.startService(intent)
         }
-//        if (action === PLAY) {
-//            context.sendBroadcast(Intent(IS_PLAYING))
-//        } else {
-//            context.sendBroadcast(Intent(IS_PAUSED))
-//        }
     }
 }

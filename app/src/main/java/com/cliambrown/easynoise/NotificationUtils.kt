@@ -8,7 +8,9 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Build
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.cliambrown.easynoise.helpers.*
 
 class NotificationUtils(base: Context?) : ContextWrapper(base) {
@@ -55,12 +57,30 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
         val pausePendingIntent: PendingIntent =
             PendingIntent.getBroadcast(this, 0, pauseIntent, 0)
 
+        val dismissIntent = Intent(this, NotificationReceiver::class.java).apply {
+            action = DISMISS
+        }
+        val dismissPendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this, 0, dismissIntent, 0)
+
+        val notificationLayout = RemoteViews(packageName, R.layout.notification_layout)
+
+        notificationLayout.setOnClickPendingIntent(R.id.playButton, playPendingIntent)
+        notificationLayout.setOnClickPendingIntent(R.id.pauseButton, pausePendingIntent)
+        notificationLayout.setOnClickPendingIntent(R.id.dismissButton, dismissPendingIntent)
+
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentText(null)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setPriority(NotificationCompat.PRIORITY_MAX)
-            .addAction(R.mipmap.ic_launcher, getString(R.string.play), playPendingIntent)
-            .addAction(R.mipmap.ic_launcher, getString(R.string.pause), pausePendingIntent)
+            .setColor(ContextCompat.getColor(this, R.color.background))
+            .setColorized(true)
+//            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(notificationLayout)
+//            .addAction(R.mipmap.ic_launcher, getString(R.string.play), playPendingIntent)
+//            .addAction(R.mipmap.ic_launcher, getString(R.string.pause), pausePendingIntent)
+//            .addAction(R.mipmap.ic_launcher, getString(R.string.dismiss), dismissPendingIntent)
             .build()
 
         return notification

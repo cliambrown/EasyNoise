@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 
 class PlayerService : Service() {
@@ -42,18 +43,23 @@ class PlayerService : Service() {
         when (action) {
             PLAY -> play()
             PAUSE -> pause()
+            DISMISS -> dismiss()
         }
-        notificationUtils = NotificationUtils(this)
-        notificationUtils.createNotificationChannel()
-        val notification = notificationUtils.createNotification()
-        startForeground(NotificationUtils.NOTIFICATION_ID, notification)
+        if (action !== DISMISS) {
+            notificationUtils = NotificationUtils(this)
+            notificationUtils.createNotificationChannel()
+            val notification = notificationUtils.createNotification()
+            startForeground(NotificationUtils.NOTIFICATION_ID, notification)
+        }
         return START_NOT_STICKY
     }
 
-    // TODO: Check Simple Music Player service for onDestroy() — release foreground service?
-//    override fun onDestroy() {
-//        super.onDestroy()
-//    }
+    override fun onDestroy() {
+        super.onDestroy()
+        getMPlayer()?.stop()
+        getMPlayer()?.release()
+        mediaPlayer = null
+    }
 
     fun getMPlayer(): MediaPlayer? {
         if (mediaPlayer == null) {
@@ -80,5 +86,11 @@ class PlayerService : Service() {
             getMPlayer()?.seekTo(0)
         }
         mActivity?.updateClient(PAUSE)
+    }
+
+    fun dismiss() {
+        pause()
+        stopForeground(true)
+        stopSelf()
     }
 }

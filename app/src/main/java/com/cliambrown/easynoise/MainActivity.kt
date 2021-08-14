@@ -55,13 +55,13 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks {
         serviceIsBound = false
     }
 
-    fun startAudio(view: View) {
+    fun play(view: View) {
         val intent = Intent(this@MainActivity, NotificationReceiver::class.java)
         intent.setAction(PLAY)
         sendBroadcast(intent)
     }
 
-    fun pauseAudio(view: View) {
+    fun pause(view: View) {
         val intent = Intent(this@MainActivity, NotificationReceiver::class.java)
         intent.setAction(PAUSE)
         sendBroadcast(intent)

@@ -4,7 +4,8 @@
     <string name="channel_description">Controller notification for Easy Noise</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
+    <string name="dismiss">Dismiss</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
+    <string name="app_widget_description">Easy Noise widget</string>
 </resources>

@@ -7,11 +7,17 @@ import android.view.View
 import android.widget.ImageButton
 import com.cliambrown.easynoise.helpers.*
 import android.os.IBinder
+import android.util.Log
+import android.widget.SeekBar
+import android.content.SharedPreferences
+import android.os.Build
 
-class MainActivity : AppCompatActivity(), PlayerService.Callbacks {
+class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSeekBarChangeListener {
 
     lateinit var playButton: ImageButton
     lateinit var pauseButton: ImageButton
+    lateinit var volumeBar: SeekBar
+    lateinit var prefs: SharedPreferences
 
     private lateinit var playerService: PlayerService
     private var serviceIsBound: Boolean = false
@@ -38,6 +44,13 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks {
         setContentView(R.layout.activity_main)
         playButton = findViewById(R.id.playButton) as ImageButton
         pauseButton = findViewById(R.id.pauseButton) as ImageButton
+        volumeBar = findViewById(R.id.volumeBar) as SeekBar
+        volumeBar.setOnSeekBarChangeListener(this)
+        prefs = getSharedPreferences(applicationContext.packageName, 0)
+        val volume = prefs.getInt("volume", 50)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            volumeBar.setProgress(volume, false)
+        }
     }
 
     override fun onStart() {
@@ -81,6 +94,22 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks {
             playButton.setVisibility(View.VISIBLE)
             pauseButton.setVisibility(View.GONE)
         }
+    }
+
+    override fun onProgressChanged(
+        seekBar: SeekBar?, progress: Int,
+        fromUser: Boolean
+    ) {
+        prefs.edit().putInt("volume", progress).apply()
+        if (serviceIsBound) playerService.updateVolume()
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {
+        // Needed for some reason
+    }
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        // Needed for some reason
     }
 
 }

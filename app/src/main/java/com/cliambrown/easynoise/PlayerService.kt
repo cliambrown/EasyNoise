@@ -3,9 +3,11 @@ package com.cliambrown.easynoise
 import android.app.Activity
 import android.app.Service
 import android.content.Intent
+import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 
 class PlayerService : Service() {
@@ -13,6 +15,7 @@ class PlayerService : Service() {
     private val binder = LocalBinder()
     var mActivity: Callbacks? = null
 
+    var prefs: SharedPreferences? = null
     var mediaPlayer: MediaPlayer? = null
     var notificationUtils: NotificationUtils? = null
 
@@ -84,6 +87,7 @@ class PlayerService : Service() {
     }
 
     fun play() {
+        updateVolume()
         getMPlayer()?.start()
         mActivity?.updateClient(PLAY)
     }
@@ -100,5 +104,16 @@ class PlayerService : Service() {
         pause()
         stopForeground(true)
         stopSelf()
+    }
+
+    fun updateVolume() {
+        Log.i("info", "updateVolume")
+        if (prefs === null) {
+            prefs = getSharedPreferences(applicationContext.packageName, 0)
+        }
+        var volume = prefs!!.getInt("volume", 50)?.toDouble()
+        val maxVolume = 100.0
+        var toVolume = volume?.div(maxVolume)?.toFloat()
+        getMPlayer()?.setVolume(toVolume, toVolume)
     }
 }

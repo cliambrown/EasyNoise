@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:backgroundTint="@color/secondaryColor"
+        android:backgroundTint="@color/transparent"
         android:src="@android:drawable/ic_media_play" />
 
     <ImageButton
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:backgroundTint="@color/secondaryColor"
+        android:backgroundTint="@color/transparent"
         android:src="@android:drawable/ic_media_pause"
         android:visibility="invisible" />
 </RelativeLayout>

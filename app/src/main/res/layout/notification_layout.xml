@@ -34,7 +34,7 @@
             android:id="@+id/playButton"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
-            android:backgroundTint="@color/secondaryColor"
+            android:backgroundTint="@color/transparent"
             android:src="@android:drawable/ic_media_play"
             android:textColor="#FFFFFF" />
 
@@ -42,17 +42,16 @@
             android:id="@+id/pauseButton"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
-            android:backgroundTint="@color/secondaryColor"
+            android:backgroundTint="@color/transparent"
             android:src="@android:drawable/ic_media_pause"
-            android:textColor="#FFFFFF"
-            android:visibility="gone" />
+            android:textColor="#FFFFFF" />
 
         <ImageButton
             android:id="@+id/dismissButton"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
-            android:layout_marginStart="32dp"
-            android:backgroundTint="@color/secondaryDarkColor"
+            android:layout_marginStart="18dp"
+            android:backgroundTint="@color/transparent"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:text="@string/dismiss"
             android:textColor="#FFFFFF" />

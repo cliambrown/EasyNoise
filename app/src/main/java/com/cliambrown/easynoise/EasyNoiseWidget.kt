@@ -5,11 +5,11 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import com.cliambrown.easynoise.helpers.*
 import android.app.PendingIntent
+import android.content.ComponentName
 
 /**
  * Implementation of App Widget functionality.
@@ -20,7 +20,6 @@ class EasyNoiseWidget : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        Log.i("info", "onUpdate")
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
@@ -40,22 +39,37 @@ class EasyNoiseWidget : AppWidgetProvider() {
         when (action) {
             WIDGET_PLAY -> play(context)
             WIDGET_PAUSE -> pause(context)
+            SET_PLAYING -> setPlaying(context, true)
+            SET_PAUSED -> setPlaying(context, false)
         }
         super.onReceive(context, intent)
     }
 
     fun play(context: Context?) {
-        Log.i("info", "widget play")
         val intent = Intent(context, NotificationReceiver::class.java)
         intent.setAction(PLAY)
         context?.sendBroadcast(intent)
     }
 
     fun pause(context: Context?) {
-        Log.i("info", "widget pause")
         val intent = Intent(context, NotificationReceiver::class.java)
         intent.setAction(PAUSE)
         context?.sendBroadcast(intent)
+    }
+
+    fun setPlaying(context: Context?, isPlaying: Boolean) {
+        if (context === null) return
+        val views = RemoteViews(context.packageName, R.layout.easy_noise_widget)
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, EasyNoiseWidget::class.java))
+        if (isPlaying) {
+            views.setViewVisibility(R.id.playButton, View.INVISIBLE)
+            views.setViewVisibility(R.id.pauseButton, View.VISIBLE)
+        } else {
+            views.setViewVisibility(R.id.pauseButton, View.INVISIBLE)
+            views.setViewVisibility(R.id.playButton, View.VISIBLE)
+        }
+        appWidgetManager.updateAppWidget(appWidgetIds, views)
     }
 }
 

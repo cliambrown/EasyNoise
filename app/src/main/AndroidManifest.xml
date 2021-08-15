@@ -16,6 +16,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.cliambrown.easynoise.action.SET_PLAYING" />
+                <action android:name="com.cliambrown.easynoise.action.SET_PAUSED" />
             </intent-filter>
 
             <meta-data

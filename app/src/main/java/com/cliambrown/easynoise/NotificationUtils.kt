@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Build
+import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -43,19 +44,7 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
         }
     }
 
-    fun createNotification(): Notification {
-
-        val playIntent = Intent(this, NotificationReceiver::class.java).apply {
-            action = PLAY
-        }
-        val playPendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(this, 0, playIntent, 0)
-
-        val pauseIntent = Intent(this, NotificationReceiver::class.java).apply {
-            action = PAUSE
-        }
-        val pausePendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(this, 0, pauseIntent, 0)
+    fun createNotification(isPlaying: Boolean): Notification {
 
         val dismissIntent = Intent(this, NotificationReceiver::class.java).apply {
             action = DISMISS
@@ -65,8 +54,24 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
 
         val notificationLayout = RemoteViews(packageName, R.layout.notification_layout)
 
-        notificationLayout.setOnClickPendingIntent(R.id.playButton, playPendingIntent)
-        notificationLayout.setOnClickPendingIntent(R.id.pauseButton, pausePendingIntent)
+        if (isPlaying) {
+            notificationLayout.setViewVisibility(R.id.playButton, View.GONE)
+            val pauseIntent = Intent(this, NotificationReceiver::class.java).apply {
+                action = PAUSE
+            }
+            val pausePendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(this, 0, pauseIntent, 0)
+            notificationLayout.setOnClickPendingIntent(R.id.pauseButton, pausePendingIntent)
+        } else {
+            notificationLayout.setViewVisibility(R.id.pauseButton, View.GONE)
+            val playIntent = Intent(this, NotificationReceiver::class.java).apply {
+                action = PLAY
+            }
+            val playPendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(this, 0, playIntent, 0)
+            notificationLayout.setOnClickPendingIntent(R.id.playButton, playPendingIntent)
+        }
+
         notificationLayout.setOnClickPendingIntent(R.id.dismissButton, dismissPendingIntent)
 
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -76,11 +81,7 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setColor(ContextCompat.getColor(this, R.color.background))
             .setColorized(true)
-//            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(notificationLayout)
-//            .addAction(R.mipmap.ic_launcher, getString(R.string.play), playPendingIntent)
-//            .addAction(R.mipmap.ic_launcher, getString(R.string.pause), pausePendingIntent)
-//            .addAction(R.mipmap.ic_launcher, getString(R.string.dismiss), dismissPendingIntent)
             .build()
 
         return notification

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 
 class PlayerService : Service() {
@@ -15,7 +14,7 @@ class PlayerService : Service() {
     var mActivity: Callbacks? = null
 
     var mediaPlayer: MediaPlayer? = null
-    lateinit var notificationUtils: NotificationUtils
+    var notificationUtils: NotificationUtils? = null
 
     inner class LocalBinder : Binder() {
         // Return this instance of LocalService so clients can call public methods
@@ -46,10 +45,19 @@ class PlayerService : Service() {
             DISMISS -> dismiss()
         }
         if (action !== DISMISS) {
-            notificationUtils = NotificationUtils(this)
-            notificationUtils.createNotificationChannel()
-            val notification = notificationUtils.createNotification()
+            if (notificationUtils === null) {
+                notificationUtils = NotificationUtils(this)
+            }
+            notificationUtils?.createNotificationChannel()
+            val notification = notificationUtils?.createNotification(action === PLAY)
             startForeground(NotificationUtils.NOTIFICATION_ID, notification)
+            val intent = Intent(this, EasyNoiseWidget::class.java)
+            if (action === PLAY) {
+                intent.setAction(SET_PLAYING)
+            } else {
+                intent.setAction(SET_PAUSED)
+            }
+            sendBroadcast(intent)
         }
         return START_NOT_STICKY
     }

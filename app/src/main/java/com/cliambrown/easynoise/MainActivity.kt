@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.ImageButton
 import com.cliambrown.easynoise.helpers.*
 import android.os.IBinder
-import android.util.Log
 import android.widget.SeekBar
 import android.content.SharedPreferences
 import android.os.Build

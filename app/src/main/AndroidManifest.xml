@@ -6,11 +6,26 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EasyNoise">
+
+        <service
+            android:name=".HeadsetMonitoringService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="initialiseHeadsetService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".HeadsetStateBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
         <receiver
             android:name=".EasyNoiseWidget"
             android:exported="true">
@@ -19,7 +34,6 @@
                 <action android:name="com.cliambrown.easynoise.action.SET_PLAYING" />
                 <action android:name="com.cliambrown.easynoise.action.SET_PAUSED" />
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/easy_noise_widget_info" />
@@ -32,6 +46,9 @@
             <intent-filter>
                 <action android:name="com.cliambrown.easynoise.action.PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.PAUSE" />
+                <action android:name="com.cliambrown.easynoise.action.DISMISS" />
+                <action android:name="com.cliambrown.easynoise.action.HEADPHONE_PLAY" />
+                <action android:name="com.cliambrown.easynoise.action.HEADPHONE_PAUSE" />
             </intent-filter>
         </service>
 
@@ -50,7 +67,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

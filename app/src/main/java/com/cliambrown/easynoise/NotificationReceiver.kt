@@ -9,19 +9,16 @@ import com.cliambrown.easynoise.helpers.*
 class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent == null) {
-            return
-        }
         val action = intent.action
         if (action !== PLAY && action !== PAUSE && action !== DISMISS) {
             return
         }
-        val intent = Intent(context, PlayerService::class.java)
-        intent.setAction(action)
+        val newIntent = Intent(context, PlayerService::class.java)
+        newIntent.setAction(action)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent)
+            context.startForegroundService(newIntent)
         } else {
-            context.startService(intent)
+            context.startService(newIntent)
         }
     }
 }

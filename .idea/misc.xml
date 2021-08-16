@@ -7,10 +7,14 @@
         <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/drawable-v21/app_widget_inner_view_background.xml" value="0.3828125" />
         <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
         <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
+        <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/drawable/launcher_background.xml" value="0.4588541666666667" />
+        <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/drawable/launcher_foreground.xml" value="0.4588541666666667" />
         <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/layout/easy_noise_widget.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/layout/notification_layout.xml" value="0.35989583333333336" />
         <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/layout/notification_layout2.xml" value="0.36367753623188404" />
+        <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.4588541666666667" />
+        <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.4588541666666667" />
         <entry key="..\:/Users/Liam/AndroidStudioProjects/EasyNoise/app/src/main/res/xml/root_preferences.xml" value="0.19270833333333334" />
         <entry key="..\:/Users/Liam/AndroidStudioProjects/WhiteNoiseforCLiamBrown/app/src/main/res/layout/activity_main.xml" value="0.20199275362318841" />
       </map>

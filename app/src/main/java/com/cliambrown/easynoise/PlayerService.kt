@@ -38,6 +38,9 @@ class PlayerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        startService(Intent(this, HeadsetMonitoringService::class.java))
+
         if (intent == null) {
             return START_NOT_STICKY
         }
@@ -46,6 +49,8 @@ class PlayerService : Service() {
             PLAY -> play()
             PAUSE -> pause()
             DISMISS -> dismiss()
+            HEADPHONE_PLAY -> play(false)
+            HEADPHONE_PAUSE -> pause(false)
         }
         if (action !== DISMISS) {
             if (notificationUtils === null) {
@@ -54,14 +59,14 @@ class PlayerService : Service() {
             notificationUtils?.createNotificationChannel()
             val notification = notificationUtils?.createNotification(action === PLAY)
             startForeground(NotificationUtils.NOTIFICATION_ID, notification)
-            val intent = Intent(this, EasyNoiseWidget::class.java)
-            if (action === PLAY) {
-                intent.setAction(SET_PLAYING)
-            } else {
-                intent.setAction(SET_PAUSED)
-            }
-            sendBroadcast(intent)
         }
+        val newIntent = Intent(this, EasyNoiseWidget::class.java)
+        if (action === PLAY) {
+            newIntent.setAction(SET_PLAYING)
+        } else {
+            newIntent.setAction(SET_PAUSED)
+        }
+        sendBroadcast(newIntent)
         return START_NOT_STICKY
     }
 
@@ -72,32 +77,36 @@ class PlayerService : Service() {
         mediaPlayer = null
     }
 
-    fun getMPlayer(): MediaPlayer? {
+    fun getMPlayer(): MediaPlayer {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(applicationContext, R.raw.pass)
             mediaPlayer?.setLooping(true)
         }
-        return mediaPlayer
+        return mediaPlayer!!
     }
 
     fun getIsPlaying(): Boolean {
-        val r: Boolean? = getMPlayer()?.isPlaying()
-        if (r is Boolean) return r
-        return false
+        return !!getMPlayer().isPlaying()
     }
 
-    fun play() {
+    fun play(doUpdatePref: Boolean = true) {
         updateVolume()
-        getMPlayer()?.start()
+        getMPlayer().start()
         mActivity?.updateClient(PLAY)
+        if (doUpdatePref) {
+            getPrefs().edit().putBoolean("wasPlaying", true).apply()
+        }
     }
 
-    fun pause() {
+    fun pause(doUpdatePref: Boolean = true) {
         if (getIsPlaying()) {
-            getMPlayer()?.pause()
-            getMPlayer()?.seekTo(0)
+            getMPlayer().pause()
+            getMPlayer().seekTo(0)
         }
         mActivity?.updateClient(PAUSE)
+        if (doUpdatePref) {
+            getPrefs().edit().putBoolean("wasPlaying", false).apply()
+        }
     }
 
     fun dismiss() {
@@ -106,14 +115,18 @@ class PlayerService : Service() {
         stopSelf()
     }
 
-    fun updateVolume() {
-        Log.i("info", "updateVolume")
+    @JvmName("getPrefs1")
+    fun getPrefs(): SharedPreferences {
         if (prefs === null) {
             prefs = getSharedPreferences(applicationContext.packageName, 0)
         }
-        var volume = prefs!!.getInt("volume", 50)?.toDouble()
+        return prefs!!
+    }
+
+    fun updateVolume() {
+        val volume = getPrefs().getInt("volume", 50).toDouble()
         val maxVolume = 100.0
-        var toVolume = volume?.div(maxVolume)?.toFloat()
-        getMPlayer()?.setVolume(toVolume, toVolume)
+        val toVolume = volume.div(maxVolume).toFloat()
+        getMPlayer().setVolume(toVolume, toVolume)
     }
 }

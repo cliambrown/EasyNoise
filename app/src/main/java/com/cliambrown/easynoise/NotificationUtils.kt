@@ -75,7 +75,7 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
         notificationLayout.setOnClickPendingIntent(R.id.dismissButton, dismissPendingIntent)
 
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.notification_icon)
             .setContentText(null)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setPriority(NotificationCompat.PRIORITY_MAX)

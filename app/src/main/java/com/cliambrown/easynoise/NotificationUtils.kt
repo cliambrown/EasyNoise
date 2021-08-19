@@ -49,7 +49,7 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
         val dismissIntent = Intent(this, NotificationReceiver::class.java).apply {
             action = DISMISS
         }
-        val dismissPendingIntent: PendingIntent =
+        val pendingDismissIntent: PendingIntent =
             PendingIntent.getBroadcast(this, 0, dismissIntent, 0)
 
         val notificationLayout = RemoteViews(packageName, R.layout.notification_layout)
@@ -59,24 +59,30 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
             val pauseIntent = Intent(this, NotificationReceiver::class.java).apply {
                 action = PAUSE
             }
-            val pausePendingIntent: PendingIntent =
+            val pendingPauseIntent: PendingIntent =
                 PendingIntent.getBroadcast(this, 0, pauseIntent, 0)
-            notificationLayout.setOnClickPendingIntent(R.id.pauseButton, pausePendingIntent)
+            notificationLayout.setOnClickPendingIntent(R.id.pauseButton, pendingPauseIntent)
         } else {
             notificationLayout.setViewVisibility(R.id.pauseButton, View.GONE)
             val playIntent = Intent(this, NotificationReceiver::class.java).apply {
                 action = PLAY
             }
-            val playPendingIntent: PendingIntent =
+            val pendingPlayIntent: PendingIntent =
                 PendingIntent.getBroadcast(this, 0, playIntent, 0)
-            notificationLayout.setOnClickPendingIntent(R.id.playButton, playPendingIntent)
+            notificationLayout.setOnClickPendingIntent(R.id.playButton, pendingPlayIntent)
         }
 
-        notificationLayout.setOnClickPendingIntent(R.id.dismissButton, dismissPendingIntent)
+        notificationLayout.setOnClickPendingIntent(R.id.dismissButton, pendingDismissIntent)
+
+        val mainIntent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingMainIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0)
 
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentText(null)
+            .setContentIntent(pendingMainIntent)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setColor(ContextCompat.getColor(this, R.color.background))

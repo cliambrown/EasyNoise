@@ -1,14 +1,17 @@
 package com.cliambrown.easynoise
 
+import android.Manifest
 import android.app.Activity
 import android.app.Service
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import com.cliambrown.easynoise.helpers.*
+import androidx.core.content.ContextCompat
 
 class PlayerService : Service() {
 
@@ -18,6 +21,8 @@ class PlayerService : Service() {
     var prefs: SharedPreferences? = null
     var mediaPlayer: MediaPlayer? = null
     var notificationUtils: NotificationUtils? = null
+
+    var outsidePauseReceiver: OutsidePauseReceiver? = null
 
     inner class LocalBinder : Binder() {
         // Return this instance of LocalService so clients can call public methods
@@ -37,9 +42,27 @@ class PlayerService : Service() {
         return binder
     }
 
+    override fun onCreate() {
+        outsidePauseReceiver = OutsidePauseReceiver()
+        val filter = IntentFilter()
+        filter.addAction(PHONE_STATE)
+        filter.addAction(HEADSET_STATE_CHANGED)
+        filter.addAction(CONNECTION_STATE_CHANGED)
+        filter.addAction(HEADSET_PLUG)
+        registerReceiver(outsidePauseReceiver, filter)
+        super.onCreate()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        startService(Intent(this, HeadsetMonitoringService::class.java))
+        val readPhoneState =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+        if (readPhoneState != PackageManager.PERMISSION_GRANTED) {
+            val mainIntent = Intent(this, MainActivity::class.java)
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            this.startActivity(mainIntent)
+            return START_NOT_STICKY
+        }
 
         if (intent == null) {
             return START_NOT_STICKY
@@ -49,8 +72,8 @@ class PlayerService : Service() {
             PLAY -> play()
             PAUSE -> pause()
             DISMISS -> dismiss()
-            HEADPHONE_PLAY -> play(false)
-            HEADPHONE_PAUSE -> pause(false)
+            OUTSIDE_PLAY -> play(false)
+            OUTSIDE_PAUSE -> pause(false)
         }
         if (action !== DISMISS) {
             if (notificationUtils === null) {
@@ -61,7 +84,7 @@ class PlayerService : Service() {
             startForeground(NotificationUtils.NOTIFICATION_ID, notification)
         }
         val newIntent = Intent(this, EasyNoiseWidget::class.java)
-        if (action === PLAY) {
+        if (action === PLAY || action === OUTSIDE_PLAY) {
             newIntent.setAction(SET_PLAYING)
         } else {
             newIntent.setAction(SET_PAUSED)
@@ -75,6 +98,7 @@ class PlayerService : Service() {
         getMPlayer()?.stop()
         getMPlayer()?.release()
         mediaPlayer = null
+        unregisterReceiver(outsidePauseReceiver)
     }
 
     fun getMPlayer(): MediaPlayer {

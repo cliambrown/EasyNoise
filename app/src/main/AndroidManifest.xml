@@ -3,6 +3,7 @@
     package="com.cliambrown.easynoise">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,28 +13,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EasyNoise">
 
-        <service
-            android:name=".HeadsetMonitoringService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="initialiseHeadsetService" />
-            </intent-filter>
-        </service>
-
         <receiver
-            android:name=".HeadsetStateBroadcastReceiver"
+            android:name=".OutsidePauseReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.bluetooth.headset.action.STATE_CHANGED" />
+                <action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.intent.action.HEADSET_PLUG" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".EasyNoiseWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.cliambrown.easynoise.action.WIDGET_PLAY" />
+                <action android:name="com.cliambrown.easynoise.action.WIDGET_PAUSE" />
                 <action android:name="com.cliambrown.easynoise.action.SET_PLAYING" />
                 <action android:name="com.cliambrown.easynoise.action.SET_PAUSED" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/easy_noise_widget_info" />
@@ -47,8 +49,8 @@
                 <action android:name="com.cliambrown.easynoise.action.PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.PAUSE" />
                 <action android:name="com.cliambrown.easynoise.action.DISMISS" />
-                <action android:name="com.cliambrown.easynoise.action.HEADPHONE_PLAY" />
-                <action android:name="com.cliambrown.easynoise.action.HEADPHONE_PAUSE" />
+                <action android:name="com.cliambrown.easynoise.action.OUTSIDE_PLAY" />
+                <action android:name="com.cliambrown.easynoise.action.OUTSIDE_PAUSE" />
             </intent-filter>
         </service>
 
@@ -59,6 +61,7 @@
             <intent-filter>
                 <action android:name="com.cliambrown.easynoise.action.PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.PAUSE" />
+                <action android:name="com.cliambrown.easynoise.action.DISMISS" />
             </intent-filter>
         </receiver>
 
@@ -70,6 +73,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

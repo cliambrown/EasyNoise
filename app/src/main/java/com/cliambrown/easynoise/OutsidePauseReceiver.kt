@@ -4,16 +4,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.telephony.TelephonyManager
 import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 
-class HeadsetStateBroadcastReceiver : BroadcastReceiver() {
-
-    val HEADPHONE_ACTIONS = arrayOf(
-        Intent.ACTION_HEADSET_PLUG,
-        "android.bluetooth.headset.action.STATE_CHANGED",
-        "android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED"
-    )
+class OutsidePauseReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
@@ -26,19 +21,28 @@ class HeadsetStateBroadcastReceiver : BroadcastReceiver() {
 
         val action = intent.action
         when (action) {
-            HEADPHONE_ACTIONS[0] -> {
+            PHONE_STATE -> {
+                // Phone call start/stop
+                val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
+                Log.i("info", "OutsidePauseReceiver onReceive; state="+state.toString())
+                val states = arrayOf("IDLE", "RINGING", "OFFHOOK")
+                doUpdate = (states.contains(state))
+                setPlaying = (state == "IDLE")
+            }
+            HEADSET_PLUG -> {
                 // Wired headset monitoring
                 doUpdate = true
                 val state = intent.getIntExtra("state", 0)
+                Log.i("info", "OutsidePauseReceiver onReceive; state="+state.toString())
                 setPlaying = (state > 0)
             }
-            HEADPHONE_ACTIONS[1] -> {
+            HEADSET_STATE_CHANGED -> {
                 // Bluetooth monitoring
                 doUpdate = true
                 val state = intent.getIntExtra("android.bluetooth.headset.extra.STATE", 0)
                 setPlaying = (state == 2)
             }
-            HEADPHONE_ACTIONS[2] -> {
+            CONNECTION_STATE_CHANGED -> {
                 // Bluetooth, works for Ice Cream Sandwich
                 doUpdate = true
                 val state = intent.getIntExtra("android.bluetooth.profile.extra.STATE", 0)
@@ -46,27 +50,20 @@ class HeadsetStateBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-        var update = "Headset state changed: doUpdate = "
-        if (doUpdate) update += "false"
-        else update += "true"
-        update += "; setPlaying = "
-        if (setPlaying) update += "true"
-        else update += "false"
-        Log.i("info", update)
+        Log.i("info", "OutsidePauseReceiver onReceive; action="+action.toString()+"; doUpdate="+(if (doUpdate) "true" else "false")+"; setPlaying="+(if (setPlaying) "true" else "false"))
 
         if (!doUpdate) return
 
         val newIntent = Intent(context, PlayerService::class.java)
         if (setPlaying) {
-            newIntent.setAction(HEADPHONE_PLAY)
+            newIntent.setAction(OUTSIDE_PLAY)
         } else {
-            newIntent.setAction(HEADPHONE_PAUSE)
+            newIntent.setAction(OUTSIDE_PAUSE)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(newIntent)
         } else {
             context.startService(newIntent)
         }
-
     }
 }

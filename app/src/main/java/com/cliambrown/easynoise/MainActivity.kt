@@ -1,5 +1,6 @@
 package com.cliambrown.easynoise
 
+import android.Manifest
 import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,7 +10,10 @@ import com.cliambrown.easynoise.helpers.*
 import android.os.IBinder
 import android.widget.SeekBar
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSeekBarChangeListener {
 
@@ -49,6 +53,13 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         val volume = prefs.getInt("volume", 50)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             volumeBar.setProgress(volume, false)
+        }
+
+        val readPhoneState =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+        if (readPhoneState != PackageManager.PERMISSION_GRANTED) {
+            val permissions = arrayOf(Manifest.permission.READ_PHONE_STATE)
+            ActivityCompat.requestPermissions(this, permissions, 1)
         }
     }
 
@@ -97,7 +108,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
 
     override fun onProgressChanged(
         seekBar: SeekBar?, progress: Int,
-        fromUser: Boolean
+        fromUser: Boolean,
     ) {
         prefs.edit().putInt("volume", progress).apply()
         if (serviceIsBound) playerService.updateVolume()

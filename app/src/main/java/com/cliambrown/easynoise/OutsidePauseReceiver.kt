@@ -20,11 +20,11 @@ class OutsidePauseReceiver : BroadcastReceiver() {
         var setPlaying = false
 
         val action = intent.action
+        Log.i("info", "OutsidePauseReceiver onReceive; action="+action)
         when (action) {
             PHONE_STATE -> {
                 // Phone call start/stop
                 val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
-                Log.i("info", "OutsidePauseReceiver onReceive; state="+state.toString())
                 val states = arrayOf("IDLE", "RINGING", "OFFHOOK")
                 doUpdate = (states.contains(state))
                 setPlaying = (state == "IDLE")
@@ -33,7 +33,7 @@ class OutsidePauseReceiver : BroadcastReceiver() {
                 // Wired headset monitoring
                 doUpdate = true
                 val state = intent.getIntExtra("state", 0)
-                Log.i("info", "OutsidePauseReceiver onReceive; state="+state.toString())
+                Log.i("info", "OutsidePauseReceiver: state="+state.toString())
                 setPlaying = (state > 0)
             }
             HEADSET_STATE_CHANGED -> {
@@ -49,8 +49,6 @@ class OutsidePauseReceiver : BroadcastReceiver() {
                 setPlaying = (state == 2)
             }
         }
-
-        Log.i("info", "OutsidePauseReceiver onReceive; action="+action.toString()+"; doUpdate="+(if (doUpdate) "true" else "false")+"; setPlaying="+(if (setPlaying) "true" else "false"))
 
         if (!doUpdate) return
 

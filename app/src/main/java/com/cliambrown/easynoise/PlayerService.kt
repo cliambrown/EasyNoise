@@ -7,19 +7,25 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.media.MediaPlayer
+import android.media.AudioAttributes
+import android.media.SoundPool
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 import androidx.core.content.ContextCompat
 
-class PlayerService : Service() {
+class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
 
     private val binder = LocalBinder()
     var mActivity: Callbacks? = null
 
     var prefs: SharedPreferences? = null
-    var mediaPlayer: MediaPlayer? = null
+    var soundPool: SoundPool? = null
+    var streamID: Int = 0
+    var isLoading: Boolean = false
+    var streamLoaded: Boolean = false
+    var isPlaying: Boolean = false
     var notificationUtils: NotificationUtils? = null
 
     var outsidePauseReceiver: OutsidePauseReceiver? = null
@@ -67,7 +73,9 @@ class PlayerService : Service() {
         if (intent == null) {
             return START_NOT_STICKY
         }
+
         val action = intent.action
+        Log.i("info", "PlayerService onStartCommand; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; action="+action)
         when (action) {
             PLAY -> play()
             PAUSE -> pause()
@@ -76,46 +84,79 @@ class PlayerService : Service() {
             OUTSIDE_PAUSE -> pause(false)
         }
         if (action !== DISMISS) {
-            if (notificationUtils === null) {
+            if (notificationUtils == null) {
                 notificationUtils = NotificationUtils(this)
             }
             notificationUtils?.createNotificationChannel()
-            val notification = notificationUtils?.createNotification(action === PLAY)
+            val notification = notificationUtils?.createNotification(action == PLAY || action == OUTSIDE_PLAY)
             startForeground(NotificationUtils.NOTIFICATION_ID, notification)
         }
         val newIntent = Intent(this, EasyNoiseWidget::class.java)
-        if (action === PLAY || action === OUTSIDE_PLAY) {
+        if (action == PLAY || action == OUTSIDE_PLAY) {
             newIntent.setAction(SET_PLAYING)
         } else {
             newIntent.setAction(SET_PAUSED)
         }
         sendBroadcast(newIntent)
+
         return START_NOT_STICKY
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        getMPlayer()?.stop()
-        getMPlayer()?.release()
-        mediaPlayer = null
+        Log.i("info", "PlayerService onDestroy; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
         unregisterReceiver(outsidePauseReceiver)
+        soundPool?.stop(streamID)
+        soundPool?.release()
+        soundPool = null
+        isPlaying = false
+        streamLoaded = false
+        super.onDestroy()
     }
 
-    fun getMPlayer(): MediaPlayer {
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(applicationContext, R.raw.pass)
-            mediaPlayer?.setLooping(true)
+    fun initSoundPool() {
+        Log.i("info", "PlayerService initSoundPool; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
+        if (isLoading) return
+        isLoading = true
+        if (soundPool == null) {
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+            soundPool = SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes)
+                .build() as SoundPool
+            soundPool!!.setOnLoadCompleteListener(this)
         }
-        return mediaPlayer!!
+        if (!streamLoaded) {
+            streamID = soundPool!!.load(this, R.raw.grey_noise, 1)
+        }
+    }
+
+    override fun onLoadComplete(pSoundPool: SoundPool, pSampleID: Int, status: Int) {
+        Log.i("info", "PlayerService onLoadComplete; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
+        streamLoaded = true
+        isLoading = false
+        playLoaded()
+    }
+
+    fun playLoaded() {
+        Log.i("info", "PlayerService playLoaded; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
+        val floatVol = updateVolume()
+        soundPool?.play(streamID, floatVol, floatVol, 1, -1, 1.0F)
+        isPlaying = true
     }
 
     fun getIsPlaying(): Boolean {
-        return !!getMPlayer().isPlaying()
+        return isPlaying
     }
 
     fun play(doUpdatePref: Boolean = true) {
-        updateVolume()
-        getMPlayer().start()
+        Log.i("info", "PlayerService play; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
+        if (streamLoaded) {
+            playLoaded()
+        } else {
+            initSoundPool()
+        }
         mActivity?.updateClient(PLAY)
         if (doUpdatePref) {
             getPrefs().edit().putBoolean("wasPlaying", true).apply()
@@ -123,10 +164,10 @@ class PlayerService : Service() {
     }
 
     fun pause(doUpdatePref: Boolean = true) {
-        if (getIsPlaying()) {
-            getMPlayer().pause()
-            getMPlayer().seekTo(0)
-        }
+        Log.i("info", "PlayerService pause; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
+        soundPool?.pause(streamID)
+        soundPool?.autoPause()
+        isPlaying = false
         mActivity?.updateClient(PAUSE)
         if (doUpdatePref) {
             getPrefs().edit().putBoolean("wasPlaying", false).apply()
@@ -134,6 +175,7 @@ class PlayerService : Service() {
     }
 
     fun dismiss() {
+        Log.i("info", "PlayerService dismiss; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
         pause()
         stopForeground(true)
         stopSelf()
@@ -141,16 +183,19 @@ class PlayerService : Service() {
 
     @JvmName("getPrefs1")
     fun getPrefs(): SharedPreferences {
-        if (prefs === null) {
+        if (prefs == null) {
             prefs = getSharedPreferences(applicationContext.packageName, 0)
         }
         return prefs!!
     }
 
-    fun updateVolume() {
+    fun updateVolume(): Float {
         val volume = getPrefs().getInt("volume", 50).toDouble()
         val maxVolume = 100.0
         val toVolume = volume.div(maxVolume).toFloat()
-        getMPlayer().setVolume(toVolume, toVolume)
+        if (streamLoaded) {
+            soundPool!!.setVolume(streamID, toVolume, toVolume)
+        }
+        return toVolume
     }
 }

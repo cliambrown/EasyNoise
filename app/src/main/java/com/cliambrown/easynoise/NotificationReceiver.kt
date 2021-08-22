@@ -4,12 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 
 class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
+        Log.i("info", "NotificationReceiver onReceive; action="+action)
         if (action !== PLAY && action !== PAUSE && action !== DISMISS) {
             return
         }

@@ -30,8 +30,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.cliambrown.easynoise.action.WIDGET_PLAY" />
-                <action android:name="com.cliambrown.easynoise.action.WIDGET_PAUSE" />
+                <action android:name="com.cliambrown.easynoise.action.TOGGLE_PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.SET_PLAYING" />
                 <action android:name="com.cliambrown.easynoise.action.SET_PAUSED" />
             </intent-filter>
@@ -48,6 +47,7 @@
             <intent-filter>
                 <action android:name="com.cliambrown.easynoise.action.PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.PAUSE" />
+                <action android:name="com.cliambrown.easynoise.action.TOGGLE_PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.DISMISS" />
                 <action android:name="com.cliambrown.easynoise.action.OUTSIDE_PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.OUTSIDE_PAUSE" />
@@ -61,6 +61,7 @@
             <intent-filter>
                 <action android:name="com.cliambrown.easynoise.action.PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.PAUSE" />
+                <action android:name="com.cliambrown.easynoise.action.TOGGLE_PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.DISMISS" />
             </intent-filter>
         </receiver>

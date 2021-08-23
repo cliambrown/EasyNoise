@@ -1,24 +1,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/widgetLayout"
     style="@style/Widget.EasyNoise.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.EasyNoise.AppWidgetContainer">
 
-    <ImageButton
-        android:id="@+id/playButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:backgroundTint="@color/transparent"
-        android:src="@android:drawable/ic_media_play" />
-
-    <ImageButton
-        android:id="@+id/pauseButton"
+    <ImageView
+        android:id="@+id/playIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:backgroundTint="@color/transparent"
-        android:src="@android:drawable/ic_media_pause"
-        android:visibility="invisible" />
+        android:src="@android:drawable/ic_media_play" />
+
+    <ImageView
+        android:id="@+id/pauseIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:src="@android:drawable/ic_media_pause" />
+
 </RelativeLayout>

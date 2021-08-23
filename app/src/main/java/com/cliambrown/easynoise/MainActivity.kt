@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         when (action) {
             PLAY -> setButtonsVisibility(true)
             PAUSE -> setButtonsVisibility(false)
+            DISMISS -> this.finishAndRemoveTask()
         }
     }
 

@@ -14,6 +14,7 @@ import android.os.IBinder
 import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 import androidx.core.content.ContextCompat
+import android.widget.Toast
 
 class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
 
@@ -22,10 +23,12 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
 
     var prefs: SharedPreferences? = null
     var soundPool: SoundPool? = null
-    var streamID: Int = 0
+    var soundID: Int = -1
+    var streamID: Int? = -1
     var isLoading: Boolean = false
     var streamLoaded: Boolean = false
     var isPlaying: Boolean = false
+    var lastAction: String? = null
     var notificationUtils: NotificationUtils? = null
 
     var outsidePauseReceiver: OutsidePauseReceiver? = null
@@ -75,10 +78,10 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         }
 
         val action = intent.action
-        Log.i("info", "PlayerService onStartCommand; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; action="+action)
         when (action) {
             PLAY -> play()
             PAUSE -> pause()
+            TOGGLE_PLAY -> togglePlay()
             DISMISS -> dismiss()
             OUTSIDE_PLAY -> play(false)
             OUTSIDE_PAUSE -> pause(false)
@@ -91,21 +94,25 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             val notification = notificationUtils?.createNotification(action == PLAY || action == OUTSIDE_PLAY)
             startForeground(NotificationUtils.NOTIFICATION_ID, notification)
         }
+
+        return START_NOT_STICKY
+    }
+
+    fun updateWidget(toIsPlaying: Boolean) {
         val newIntent = Intent(this, EasyNoiseWidget::class.java)
-        if (action == PLAY || action == OUTSIDE_PLAY) {
+        if (toIsPlaying) {
             newIntent.setAction(SET_PLAYING)
         } else {
             newIntent.setAction(SET_PAUSED)
         }
         sendBroadcast(newIntent)
-
-        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
-        Log.i("info", "PlayerService onDestroy; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
         unregisterReceiver(outsidePauseReceiver)
-        soundPool?.stop(streamID)
+        if (streamID != null && streamID!! > 0) {
+            soundPool?.stop(streamID!!)
+        }
         soundPool?.release()
         soundPool = null
         isPlaying = false
@@ -114,7 +121,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun initSoundPool() {
-        Log.i("info", "PlayerService initSoundPool; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
         if (isLoading) return
         isLoading = true
         if (soundPool == null) {
@@ -128,21 +134,26 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             soundPool!!.setOnLoadCompleteListener(this)
         }
         if (!streamLoaded) {
-            streamID = soundPool!!.load(this, R.raw.grey_noise, 1)
+            soundID = soundPool!!.load(this, R.raw.grey_noise, 1)
         }
     }
 
     override fun onLoadComplete(pSoundPool: SoundPool, pSampleID: Int, status: Int) {
-        Log.i("info", "PlayerService onLoadComplete; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
-        streamLoaded = true
+        streamLoaded = (soundID > 0)
         isLoading = false
-        playLoaded()
+        if (streamLoaded && lastAction.equals("play")) {
+            playLoaded()
+        } else {
+            val toast = Toast.makeText(applicationContext,
+                "Error loading sound",
+                Toast.LENGTH_SHORT)
+            toast.show()
+        }
     }
 
     fun playLoaded() {
-        Log.i("info", "PlayerService playLoaded; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
         val floatVol = updateVolume()
-        soundPool?.play(streamID, floatVol, floatVol, 1, -1, 1.0F)
+        streamID = soundPool?.play(soundID, floatVol, floatVol, 1, -1, 1.0F)
         isPlaying = true
     }
 
@@ -150,32 +161,41 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         return isPlaying
     }
 
+    fun togglePlay() {
+        if (!isPlaying && !isLoading) {
+            play()
+        } else {
+            pause()
+        }
+    }
+
     fun play(doUpdatePref: Boolean = true) {
-        Log.i("info", "PlayerService play; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
+        lastAction = "play"
         if (streamLoaded) {
             playLoaded()
         } else {
             initSoundPool()
         }
         mActivity?.updateClient(PLAY)
+        updateWidget(true)
         if (doUpdatePref) {
             getPrefs().edit().putBoolean("wasPlaying", true).apply()
         }
     }
 
     fun pause(doUpdatePref: Boolean = true) {
-        Log.i("info", "PlayerService pause; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
-        soundPool?.pause(streamID)
+        lastAction = "pause"
         soundPool?.autoPause()
         isPlaying = false
         mActivity?.updateClient(PAUSE)
+        updateWidget(false)
         if (doUpdatePref) {
             getPrefs().edit().putBoolean("wasPlaying", false).apply()
         }
     }
 
     fun dismiss() {
-        Log.i("info", "PlayerService dismiss; streamLoaded="+streamLoaded+"; isPlaying="+isPlaying+"; streamID="+streamID)
+        mActivity?.updateClient(DISMISS)
         pause()
         stopForeground(true)
         stopSelf()
@@ -194,7 +214,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         val maxVolume = 100.0
         val toVolume = volume.div(maxVolume).toFloat()
         if (streamLoaded) {
-            soundPool!!.setVolume(streamID, toVolume, toVolume)
+            soundPool!!.setVolume(streamID!!, toVolume, toVolume)
         }
         return toVolume
     }

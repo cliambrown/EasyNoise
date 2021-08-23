@@ -11,8 +11,8 @@ class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
-        Log.i("info", "NotificationReceiver onReceive; action="+action)
-        if (action !== PLAY && action !== PAUSE && action !== DISMISS) {
+        val actions = arrayOf(PLAY, PAUSE, TOGGLE_PLAY, DISMISS)
+        if (!actions.contains(action)) {
             return
         }
         val newIntent = Intent(context, PlayerService::class.java)

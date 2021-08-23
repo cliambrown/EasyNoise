@@ -4,12 +4,10 @@ private const val PATH = "com.cliambrown.easynoise.action."
 
 const val PLAY = PATH + "PLAY"
 const val PAUSE = PATH + "PAUSE"
+const val TOGGLE_PLAY = PATH + "TOGGLE_PLAY"
 const val DISMISS = PATH + "DISMISS"
 const val OUTSIDE_PLAY = PATH + "OUTSIDE_PLAY"
 const val OUTSIDE_PAUSE = PATH + "OUTSIDE_PAUSE"
-
-const val WIDGET_PLAY = PATH + "WIDGET_PLAY"
-const val WIDGET_PAUSE = PATH + "WIDGET_PAUSE"
 const val SET_PLAYING = PATH + "SET_PLAYING"
 const val SET_PAUSED = PATH + "SET_PAUSED"
 

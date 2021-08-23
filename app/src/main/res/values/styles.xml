@@ -2,7 +2,7 @@
 
     <style name="Widget.EasyNoise.AppWidget.Container" parent="android:Widget">
         <item name="android:id">@android:id/background</item>
-        <item name="android:background">@color/transparent</item>
+        <item name="android:background">@color/background</item>
     </style>
 
     <style name="Widget.EasyNoise.AppWidget.InnerView" parent="android:Widget">

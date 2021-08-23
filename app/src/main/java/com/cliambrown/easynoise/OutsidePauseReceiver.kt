@@ -20,7 +20,6 @@ class OutsidePauseReceiver : BroadcastReceiver() {
         var setPlaying = false
 
         val action = intent.action
-        Log.i("info", "OutsidePauseReceiver onReceive; action="+action)
         when (action) {
             PHONE_STATE -> {
                 // Phone call start/stop
@@ -33,7 +32,6 @@ class OutsidePauseReceiver : BroadcastReceiver() {
                 // Wired headset monitoring
                 doUpdate = true
                 val state = intent.getIntExtra("state", 0)
-                Log.i("info", "OutsidePauseReceiver: state="+state.toString())
                 setPlaying = (state > 0)
             }
             HEADSET_STATE_CHANGED -> {

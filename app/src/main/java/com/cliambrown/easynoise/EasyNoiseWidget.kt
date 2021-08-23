@@ -39,37 +39,31 @@ class EasyNoiseWidget : AppWidgetProvider() {
         val action = intent?.action
         Log.i("info", "EasyNoiseWidget onReceive; action="+action)
         when (action) {
-            WIDGET_PLAY -> play(context)
-            WIDGET_PAUSE -> pause(context)
+            TOGGLE_PLAY -> togglePlay(context)
             SET_PLAYING -> setPlaying(context, true)
             SET_PAUSED -> setPlaying(context, false)
         }
         super.onReceive(context, intent)
     }
 
-    fun play(context: Context?) {
+    fun togglePlay(context: Context?) {
         val intent = Intent(context, NotificationReceiver::class.java)
-        intent.setAction(PLAY)
-        context?.sendBroadcast(intent)
-    }
-
-    fun pause(context: Context?) {
-        val intent = Intent(context, NotificationReceiver::class.java)
-        intent.setAction(PAUSE)
+        intent.setAction(TOGGLE_PLAY)
         context?.sendBroadcast(intent)
     }
 
     fun setPlaying(context: Context?, isPlaying: Boolean) {
         if (context == null) return
+        Log.i("info", "EasyNoiseWidget setPlaying; isPlaying="+isPlaying.toString())
         val views = RemoteViews(context.packageName, R.layout.easy_noise_widget)
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, EasyNoiseWidget::class.java))
         if (isPlaying) {
-            views.setViewVisibility(R.id.playButton, View.INVISIBLE)
-            views.setViewVisibility(R.id.pauseButton, View.VISIBLE)
+            views.setViewVisibility(R.id.playIcon, View.INVISIBLE)
+            views.setViewVisibility(R.id.pauseIcon, View.VISIBLE)
         } else {
-            views.setViewVisibility(R.id.pauseButton, View.INVISIBLE)
-            views.setViewVisibility(R.id.playButton, View.VISIBLE)
+            views.setViewVisibility(R.id.pauseIcon, View.INVISIBLE)
+            views.setViewVisibility(R.id.playIcon, View.VISIBLE)
         }
         appWidgetManager.updateAppWidget(appWidgetIds, views)
     }
@@ -81,18 +75,14 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
+    Log.i("info", "EasyNoiseWidget updateAppWidget")
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.easy_noise_widget)
 
-    val playIntent = Intent(context, EasyNoiseWidget::class.java)
-    playIntent.setAction(WIDGET_PLAY)
-    val pendingPlayIntent = PendingIntent.getBroadcast(context, 0, playIntent, 0)
-    views.setOnClickPendingIntent(R.id.playButton, pendingPlayIntent)
-
-    val pauseIntent = Intent(context, EasyNoiseWidget:: class.java)
-    pauseIntent.setAction(WIDGET_PAUSE)
-    val pendingPauseIntent = PendingIntent.getBroadcast(context, 0, pauseIntent, 0)
-    views.setOnClickPendingIntent(R.id.pauseButton, pendingPauseIntent)
+    val togglePlayIntent = Intent(context, EasyNoiseWidget::class.java)
+    togglePlayIntent.setAction(TOGGLE_PLAY)
+    val pendingTogglePlayIntent = PendingIntent.getBroadcast(context, 0, togglePlayIntent, 0)
+    views.setOnClickPendingIntent(R.id.widgetLayout, pendingTogglePlayIntent)
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, views)

@@ -11,7 +11,7 @@ class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
-        val actions = arrayOf(PLAY, PAUSE, TOGGLE_PLAY, DISMISS)
+        val actions = arrayOf(PLAY, PAUSE, TOGGLE_PLAY, DISMISS, VOLUME_UP, VOLUME_DOWN)
         if (!actions.contains(action)) {
             return
         }

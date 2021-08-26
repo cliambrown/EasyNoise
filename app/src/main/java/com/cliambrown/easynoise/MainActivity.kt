@@ -12,6 +12,7 @@ import android.widget.SeekBar
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -94,6 +95,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
             PLAY -> setButtonsVisibility(true)
             PAUSE -> setButtonsVisibility(false)
             DISMISS -> this.finishAndRemoveTask()
+            VOLUME_CHANGED -> volumeChanged()
         }
     }
 
@@ -107,10 +109,17 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         }
     }
 
+    fun volumeChanged() {
+        Log.i("info", "volumeChanged")
+        val volume = prefs.getInt("volume", 50)
+        volumeBar.setProgress(volume)
+    }
+
     override fun onProgressChanged(
         seekBar: SeekBar?, progress: Int,
         fromUser: Boolean,
     ) {
+        Log.i("info", "onProgressChanged")
         prefs.edit().putInt("volume", progress).apply()
         if (serviceIsBound) playerService.updateVolume()
     }

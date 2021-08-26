@@ -46,6 +46,20 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
 
     fun createNotification(isPlaying: Boolean): Notification {
 
+        createNotificationChannel()
+
+        val volUpIntent = Intent(this, NotificationReceiver::class.java).apply {
+            action = VOLUME_UP
+        }
+        val pendingVolUpIntent: PendingIntent =
+            PendingIntent.getBroadcast(this, 0, volUpIntent, 0)
+
+        val volDownIntent = Intent(this, NotificationReceiver::class.java).apply {
+            action = VOLUME_DOWN
+        }
+        val pendingVolDownIntent: PendingIntent =
+            PendingIntent.getBroadcast(this, 0, volDownIntent, 0)
+
         val dismissIntent = Intent(this, NotificationReceiver::class.java).apply {
             action = DISMISS
         }
@@ -72,6 +86,8 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
             notificationLayout.setOnClickPendingIntent(R.id.playButton, pendingPlayIntent)
         }
 
+        notificationLayout.setOnClickPendingIntent(R.id.upButton, pendingVolUpIntent)
+        notificationLayout.setOnClickPendingIntent(R.id.downButton, pendingVolDownIntent)
         notificationLayout.setOnClickPendingIntent(R.id.dismissButton, pendingDismissIntent)
 
         val mainIntent = Intent(this, MainActivity::class.java).apply {

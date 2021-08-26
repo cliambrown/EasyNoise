@@ -18,7 +18,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:src="@android:drawable/ic_media_pause" />
+        android:src="@android:drawable/ic_media_pause"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/center"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="0dp"
+        android:layout_toLeftOf="@id/center"
+        android:src="@drawable/wave"
+        app:tint="@color/secondaryLightColor" />
 
 </RelativeLayout>

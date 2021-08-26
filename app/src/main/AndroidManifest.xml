@@ -49,6 +49,8 @@
                 <action android:name="com.cliambrown.easynoise.action.PAUSE" />
                 <action android:name="com.cliambrown.easynoise.action.TOGGLE_PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.DISMISS" />
+                <action android:name="com.cliambrown.easynoise.action.VOLUME_UP" />
+                <action android:name="com.cliambrown.easynoise.action.VOLUME_DOWN" />
                 <action android:name="com.cliambrown.easynoise.action.OUTSIDE_PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.OUTSIDE_PAUSE" />
             </intent-filter>
@@ -63,6 +65,8 @@
                 <action android:name="com.cliambrown.easynoise.action.PAUSE" />
                 <action android:name="com.cliambrown.easynoise.action.TOGGLE_PLAY" />
                 <action android:name="com.cliambrown.easynoise.action.DISMISS" />
+                <action android:name="com.cliambrown.easynoise.action.VOLUME_UP" />
+                <action android:name="com.cliambrown.easynoise.action.VOLUME_DOWN" />
             </intent-filter>
         </receiver>
 

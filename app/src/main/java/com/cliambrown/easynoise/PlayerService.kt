@@ -15,6 +15,7 @@ import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 import androidx.core.content.ContextCompat
 import android.widget.Toast
+import kotlin.math.roundToInt
 
 class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
 
@@ -85,17 +86,19 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             DISMISS -> dismiss()
             OUTSIDE_PLAY -> play(false)
             OUTSIDE_PAUSE -> pause(false)
-        }
-        if (action !== DISMISS) {
-            if (notificationUtils == null) {
-                notificationUtils = NotificationUtils(this)
-            }
-            notificationUtils?.createNotificationChannel()
-            val notification = notificationUtils?.createNotification(action == PLAY || action == OUTSIDE_PLAY)
-            startForeground(NotificationUtils.NOTIFICATION_ID, notification)
+            VOLUME_UP -> updateVolume(+5)
+            VOLUME_DOWN -> updateVolume(-5)
         }
 
         return START_NOT_STICKY
+    }
+
+    fun createNotification(isPlaying: Boolean) {
+        if (notificationUtils == null) {
+            notificationUtils = NotificationUtils(this)
+        }
+        val notification = notificationUtils?.createNotification(isPlaying)
+        startForeground(NotificationUtils.NOTIFICATION_ID, notification)
     }
 
     fun updateWidget(toIsPlaying: Boolean) {
@@ -176,21 +179,22 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         } else {
             initSoundPool()
         }
-        mActivity?.updateClient(PLAY)
-        updateWidget(true)
-        if (doUpdatePref) {
-            getPrefs().edit().putBoolean("wasPlaying", true).apply()
-        }
+        onPlayChanged(true, doUpdatePref)
     }
 
     fun pause(doUpdatePref: Boolean = true) {
         lastAction = "pause"
         soundPool?.autoPause()
         isPlaying = false
-        mActivity?.updateClient(PAUSE)
-        updateWidget(false)
+        onPlayChanged(false, doUpdatePref)
+    }
+
+    fun onPlayChanged(toPlaying: Boolean, doUpdatePref: Boolean) {
+        mActivity?.updateClient(if (toPlaying) PLAY else PAUSE)
+        updateWidget(toPlaying)
+        createNotification(toPlaying)
         if (doUpdatePref) {
-            getPrefs().edit().putBoolean("wasPlaying", false).apply()
+            getPrefs().edit().putBoolean("wasPlaying", toPlaying).apply()
         }
     }
 
@@ -209,9 +213,16 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         return prefs!!
     }
 
-    fun updateVolume(): Float {
-        val volume = getPrefs().getInt("volume", 50).toDouble()
+    fun updateVolume(adjustBy: Int? = null): Float {
+        var volume = getPrefs().getInt("volume", 50).toDouble()
         val maxVolume = 100.0
+        if (adjustBy != null) {
+            volume += adjustBy
+            if (volume > maxVolume) volume = maxVolume
+            else if (volume < 0.0) volume = 0.0
+            getPrefs().edit().putInt("volume", volume.roundToInt()).apply()
+            mActivity?.updateClient(VOLUME_CHANGED)
+        }
         val toVolume = volume.div(maxVolume).toFloat()
         if (streamLoaded) {
             soundPool!!.setVolume(streamID!!, toVolume, toVolume)

@@ -6,4 +6,6 @@
     <string name="pause">Pause</string>
     <string name="dismiss">Dismiss</string>
     <string name="app_widget_description">Easy Noise widget</string>
+    <string name="lower_volume">Lower the volume</string>
+    <string name="increase_volume">Increase the volume</string>
 </resources>

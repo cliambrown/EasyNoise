@@ -95,8 +95,13 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
         }
         val pendingMainIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0)
 
+        val smallIcon = if (isPlaying) R.drawable.notification_icon else R.drawable.paused_notification_icon
+        if (!isPlaying) {
+            notificationLayout.setTextViewCompoundDrawables(R.id.appName, R.drawable.paused_notification_icon, 0, 0, 0)
+        }
+
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.notification_icon)
+            .setSmallIcon(smallIcon)
             .setContentText(null)
             .setContentIntent(pendingMainIntent)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

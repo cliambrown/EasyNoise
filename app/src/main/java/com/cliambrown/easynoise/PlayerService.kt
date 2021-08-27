@@ -11,7 +11,6 @@ import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 import androidx.core.content.ContextCompat
 import android.widget.Toast
@@ -137,7 +136,19 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             soundPool!!.setOnLoadCompleteListener(this)
         }
         if (!streamLoaded) {
-            soundID = soundPool!!.load(this, R.raw.grey_noise, 1)
+            val noise = getPrefs().getString("noise", "grey")
+            var resource: Int = when (noise) {
+                "grey" -> R.raw.grey_noise
+                "grey 2" -> R.raw.grey_noise_2
+                "white" -> R.raw.white_noise
+                "pink" -> R.raw.pink_noise
+                "brown" -> R.raw.brown_noise
+                "blue" -> R.raw.blue_noise
+                else -> -1
+            }
+            if (resource > 0) {
+                soundID = soundPool!!.load(this, resource, 1)
+            }
         }
     }
 
@@ -228,5 +239,15 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             soundPool!!.setVolume(streamID!!, toVolume, toVolume)
         }
         return toVolume
+    }
+
+    fun noiseChanged() {
+        pause(false)
+        if (streamLoaded) {
+            soundPool?.stop(streamID!!)
+            soundPool?.unload(soundID)
+            streamLoaded = false
+        }
+        play(false)
     }
 }

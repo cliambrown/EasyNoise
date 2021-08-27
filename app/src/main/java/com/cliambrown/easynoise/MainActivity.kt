@@ -5,14 +5,12 @@ import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
 import com.cliambrown.easynoise.helpers.*
 import android.os.IBinder
-import android.widget.SeekBar
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -21,6 +19,8 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     lateinit var playButton: ImageButton
     lateinit var pauseButton: ImageButton
     lateinit var volumeBar: SeekBar
+    lateinit var noiseSpinner: Spinner
+    lateinit var noises: Array<String>
     lateinit var prefs: SharedPreferences
 
     private lateinit var playerService: PlayerService
@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         setContentView(R.layout.activity_main)
         playButton = findViewById(R.id.playButton) as ImageButton
         pauseButton = findViewById(R.id.pauseButton) as ImageButton
+
         volumeBar = findViewById(R.id.volumeBar) as SeekBar
         volumeBar.setOnSeekBarChangeListener(this)
         prefs = getSharedPreferences(applicationContext.packageName, 0)
@@ -55,6 +56,33 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             volumeBar.setProgress(volume, false)
         }
+
+        val noise = prefs.getString("noise", "grey")
+
+        noiseSpinner = findViewById(R.id.noiseSpinner)
+        noises = resources.getStringArray(R.array.noises)
+        val adapter = ArrayAdapter(
+            this,
+            R.layout.spinner_list, noises
+        )
+        noiseSpinner.adapter = adapter
+
+        val spinnerPosition: Int = adapter.getPosition(noise)
+        noiseSpinner.setSelection(spinnerPosition)
+
+        noiseSpinner.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    val newNoise = noises[position]
+                    prefs.edit().putString("noise", newNoise).apply()
+                    if (serviceIsBound) {
+                        playerService.noiseChanged()
+                    }
+                }
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    //
+                }
+            }
 
         val readPhoneState =
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
@@ -110,7 +138,6 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     }
 
     fun volumeChanged() {
-        Log.i("info", "volumeChanged")
         val volume = prefs.getInt("volume", 50)
         volumeBar.setProgress(volume)
     }
@@ -119,7 +146,6 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         seekBar: SeekBar?, progress: Int,
         fromUser: Boolean,
     ) {
-        Log.i("info", "onProgressChanged")
         prefs.edit().putInt("volume", progress).apply()
         if (serviceIsBound) playerService.updateVolume()
     }

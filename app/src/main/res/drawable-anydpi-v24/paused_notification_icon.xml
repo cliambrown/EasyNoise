@@ -27,7 +27,7 @@
                       android:strokeColor="@color/primaryTextColor"
                       android:strokeWidth="4"
                       android:strokeLineCap="round"
-                      android:pathData="M 84 17.8 C 98 23.1, 98 27, 84 32.3 C 70 37.6, 70 41.5, 84 46.8 C 98 52, 98 56, 84 61.2 C 70 66.5, 70 70.4, 84 75.7 C 98 81, 98 84.9, 84 90.2"/>
+                      android:pathData="M 84 17.8 L 84 90.2"/>
               </group>
           </group>
       </group>

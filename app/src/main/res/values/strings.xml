@@ -8,4 +8,14 @@
     <string name="app_widget_description">Easy Noise widget</string>
     <string name="lower_volume">Lower the volume</string>
     <string name="increase_volume">Increase the volume</string>
+    <string name="adjust_volume">Adjust volume</string>
+
+    <string-array name="noises">
+        <item>grey</item>
+        <item>grey 2</item>
+        <item>white</item>
+        <item>pink</item>
+        <item>brown</item>
+        <item>blue</item>
+    </string-array>
 </resources>

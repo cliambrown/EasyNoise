@@ -147,6 +147,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         var resource: Int = when (noise) {
             "fuzz" -> R.raw.fuzz
             "grey" -> R.raw.grey_noise
+            "grey 2" -> R.raw.grey_noise_2
             "white" -> R.raw.white_noise
             "pink" -> R.raw.pink_noise
             "brown" -> R.raw.brown_noise

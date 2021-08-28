@@ -10,9 +10,14 @@ import android.os.IBinder
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
+import android.view.MenuItem
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.content.Intent
+import android.net.Uri
+import android.view.Menu
+
 
 class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSeekBarChangeListener {
 
@@ -43,9 +48,16 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.main_toolbar, menu)
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+
         playButton = findViewById(R.id.playButton) as ImageButton
         pauseButton = findViewById(R.id.pauseButton) as ImageButton
 
@@ -104,6 +116,19 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         super.onStop()
         unbindService(connection)
         serviceIsBound = false
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_info -> {
+            // Click "info" button
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/cliambrown/EasyNoise"))
+            startActivity(browserIntent)
+            true
+        }
+        else -> {
+            // Unrecognized action: invoke superclass
+            super.onOptionsItemSelected(item)
+        }
     }
 
     fun play(view: View) {

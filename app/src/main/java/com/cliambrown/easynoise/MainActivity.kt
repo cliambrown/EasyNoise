@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
             volumeBar.setProgress(volume, false)
         }
 
-        val noise = prefs.getString("noise", "grey")
+        val noise = prefs.getString("noise", "fuzz")
 
         noiseSpinner = findViewById(R.id.noiseSpinner)
         noises = resources.getStringArray(R.array.noises)

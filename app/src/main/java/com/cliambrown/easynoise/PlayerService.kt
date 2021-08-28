@@ -142,11 +142,11 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun loadNoise() {
-        val noise = getPrefs().getString("noise", "grey")
+        val noise = getPrefs().getString("noise", "fuzz")
         currentNoise = noise
         var resource: Int = when (noise) {
+            "fuzz" -> R.raw.fuzz
             "grey" -> R.raw.grey_noise
-            "grey 2" -> R.raw.grey_noise_2
             "white" -> R.raw.white_noise
             "pink" -> R.raw.pink_noise
             "brown" -> R.raw.brown_noise
@@ -248,7 +248,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun noiseChanged() {
-        val newNoise = getPrefs().getString("noise", "grey")
+        val newNoise = getPrefs().getString("noise", "fuzz")
         if (newNoise.equals(currentNoise)) return
         val wasPlaying = isPlaying
         if (wasPlaying) pause(false)

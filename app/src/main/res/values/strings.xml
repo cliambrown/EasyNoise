@@ -11,8 +11,8 @@
     <string name="adjust_volume">Adjust volume</string>
 
     <string-array name="noises">
+        <item>fuzz</item>
         <item>grey</item>
-        <item>grey 2</item>
         <item>white</item>
         <item>pink</item>
         <item>brown</item>

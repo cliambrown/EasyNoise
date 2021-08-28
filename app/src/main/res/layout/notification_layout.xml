@@ -42,7 +42,7 @@
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/transparent"
             android:contentDescription="@string/lower_volume"
-            android:src="@android:drawable/arrow_down_float"
+            android:src="@drawable/ic_minus"
             android:textColor="#FFFFFF" />
 
         <ImageButton
@@ -52,7 +52,7 @@
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/transparent"
             android:contentDescription="@string/increase_volume"
-            android:src="@android:drawable/arrow_up_float"
+            android:src="@drawable/ic_plus"
             android:textColor="#FFFFFF" />
 
         <ImageButton
@@ -61,7 +61,7 @@
             android:layout_height="46dp"
             android:backgroundTint="@color/transparent"
             android:contentDescription="@string/play"
-            android:src="@android:drawable/ic_media_play"
+            android:src="@drawable/ic_baseline_play_arrow_24"
             android:textColor="#FFFFFF" />
 
         <ImageButton
@@ -70,7 +70,7 @@
             android:layout_height="46dp"
             android:backgroundTint="@color/transparent"
             android:contentDescription="@string/pause"
-            android:src="@android:drawable/ic_media_pause"
+            android:src="@drawable/ic_baseline_pause_24"
             android:textColor="#FFFFFF" />
 
         <ImageButton
@@ -80,7 +80,7 @@
             android:layout_marginStart="8dp"
             android:backgroundTint="@color/transparent"
             android:contentDescription="@string/dismiss"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:src="@drawable/ic_baseline_close_24"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 

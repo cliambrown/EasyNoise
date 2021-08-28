@@ -43,8 +43,8 @@
 
     <ImageButton
         android:id="@+id/playButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="@color/transparent"
         android:onClick="play"
@@ -56,8 +56,8 @@
 
     <ImageButton
         android:id="@+id/pauseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="@color/transparent"
         android:onClick="pause"

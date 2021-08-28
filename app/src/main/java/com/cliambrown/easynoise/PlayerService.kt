@@ -22,6 +22,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     var mActivity: Callbacks? = null
 
     var prefs: SharedPreferences? = null
+    var currentNoise: String? = null
     var soundPool: SoundPool? = null
     var soundID: Int = -1
     var streamID: Int? = -1
@@ -136,27 +137,32 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             soundPool!!.setOnLoadCompleteListener(this)
         }
         if (!streamLoaded) {
-            val noise = getPrefs().getString("noise", "grey")
-            var resource: Int = when (noise) {
-                "grey" -> R.raw.grey_noise
-                "grey 2" -> R.raw.grey_noise_2
-                "white" -> R.raw.white_noise
-                "pink" -> R.raw.pink_noise
-                "brown" -> R.raw.brown_noise
-                "blue" -> R.raw.blue_noise
-                else -> -1
-            }
-            if (resource > 0) {
-                soundID = soundPool!!.load(this, resource, 1)
-            }
+            loadNoise()
+        }
+    }
+
+    fun loadNoise() {
+        val noise = getPrefs().getString("noise", "grey")
+        currentNoise = noise
+        var resource: Int = when (noise) {
+            "grey" -> R.raw.grey_noise
+            "grey 2" -> R.raw.grey_noise_2
+            "white" -> R.raw.white_noise
+            "pink" -> R.raw.pink_noise
+            "brown" -> R.raw.brown_noise
+            "blue" -> R.raw.blue_noise
+            else -> -1
+        }
+        if (resource > 0) {
+            soundID = soundPool!!.load(this, resource, 1)
         }
     }
 
     override fun onLoadComplete(pSoundPool: SoundPool, pSampleID: Int, status: Int) {
         streamLoaded = (soundID > 0)
         isLoading = false
-        if (streamLoaded && lastAction.equals("play")) {
-            playLoaded()
+        if (streamLoaded) {
+            if (lastAction.equals("play")) playLoaded()
         } else {
             val toast = Toast.makeText(applicationContext,
                 "Error loading sound",
@@ -242,12 +248,15 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun noiseChanged() {
-        pause(false)
+        val newNoise = getPrefs().getString("noise", "grey")
+        if (newNoise.equals(currentNoise)) return
+        val wasPlaying = isPlaying
+        if (wasPlaying) pause(false)
         if (streamLoaded) {
             soundPool?.stop(streamID!!)
             soundPool?.unload(soundID)
             streamLoaded = false
         }
-        play(false)
+        if (wasPlaying) play(false)
     }
 }

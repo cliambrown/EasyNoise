@@ -17,7 +17,7 @@ as music or video). If you know of another way to solve this without the Phone p
 
 ## Screenshots
 
-![Screenshot 1](https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_1.png) ![Screenshot 2](https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_1.png)
+<img src="https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_1.png" width="280px" alt="Screenshot 1> <img src="https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_1.png" width="280px" alt="Screenshot 2">
 
 ## Installation
 

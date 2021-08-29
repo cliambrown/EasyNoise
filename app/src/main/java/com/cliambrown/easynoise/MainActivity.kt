@@ -18,7 +18,6 @@ import android.content.Intent
 import android.net.Uri
 import android.view.Menu
 
-
 class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSeekBarChangeListener {
 
     lateinit var playButton: ImageButton

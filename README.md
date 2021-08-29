@@ -15,6 +15,10 @@ able to pause playback during phone calls. The usual method for handling this in
 Audio Focus, but that would mean that this app would not be able to play music beneath other sounds (such 
 as music or video). If you know of another way to solve this without the Phone permission, please let me know!
 
+## Screenshots
+
+![Screenshot 1](https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_1.png) ![Screenshot 2](https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_1.png)
+
 ## Installation
 
 Clone the repo, open the project in Android Studio, hit "Run".

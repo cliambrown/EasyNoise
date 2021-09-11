@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Binder
 import android.os.IBinder
@@ -56,6 +57,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         outsidePauseReceiver = OutsidePauseReceiver()
         val filter = IntentFilter()
         filter.addAction(PHONE_STATE)
+        filter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
         filter.addAction(HEADSET_STATE_CHANGED)
         filter.addAction(CONNECTION_STATE_CHANGED)
         filter.addAction(HEADSET_PLUG)

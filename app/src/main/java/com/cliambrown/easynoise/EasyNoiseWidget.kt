@@ -10,6 +10,7 @@ import android.widget.RemoteViews
 import com.cliambrown.easynoise.helpers.*
 import android.app.PendingIntent
 import android.content.ComponentName
+import android.os.Build
 
 /**
  * Implementation of App Widget functionality.
@@ -45,9 +46,16 @@ class EasyNoiseWidget : AppWidgetProvider() {
     }
 
     fun togglePlay(context: Context?) {
-        val intent = Intent(context, NotificationReceiver::class.java)
+//        val intent = Intent(context, NotificationReceiver::class.java)
+//        intent.setAction(TOGGLE_PLAY)
+//        context?.sendBroadcast(intent)
+        val intent = Intent(context, PlayerService::class.java)
         intent.setAction(TOGGLE_PLAY)
-        context?.sendBroadcast(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context?.startForegroundService(intent)
+        } else {
+            context?.startService(intent)
+        }
     }
 
     fun setPlaying(context: Context?, isPlaying: Boolean) {

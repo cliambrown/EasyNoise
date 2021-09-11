@@ -3,8 +3,10 @@ package com.cliambrown.easynoise
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.os.Build
 import android.telephony.TelephonyManager
+import android.widget.Toast
 import com.cliambrown.easynoise.helpers.*
 
 class OutsidePauseReceiver : BroadcastReceiver() {
@@ -27,23 +29,28 @@ class OutsidePauseReceiver : BroadcastReceiver() {
                 doUpdate = (states.contains(state))
                 setPlaying = (state == "IDLE")
             }
+            AudioManager.ACTION_AUDIO_BECOMING_NOISY -> {
+                Toast.makeText(context, "ACTION_AUDIO_BECOMING_NOISY", Toast.LENGTH_SHORT).show()
+                setPlaying = false
+                doUpdate = true
+            }
             HEADSET_PLUG -> {
                 // Wired headset monitoring
-                doUpdate = true
                 val state = intent.getIntExtra("state", 0)
                 setPlaying = (state > 0)
+                doUpdate = setPlaying
             }
             HEADSET_STATE_CHANGED -> {
                 // Bluetooth monitoring
-                doUpdate = true
                 val state = intent.getIntExtra("android.bluetooth.headset.extra.STATE", 0)
                 setPlaying = (state == 2)
+                doUpdate = setPlaying
             }
             CONNECTION_STATE_CHANGED -> {
                 // Bluetooth, works for Ice Cream Sandwich
-                doUpdate = true
                 val state = intent.getIntExtra("android.bluetooth.profile.extra.STATE", 0)
                 setPlaying = (state == 2)
+                doUpdate = setPlaying
             }
         }
 

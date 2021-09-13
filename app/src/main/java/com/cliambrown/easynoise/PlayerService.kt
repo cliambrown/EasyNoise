@@ -213,6 +213,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         mActivity?.updateClient(if (toPlaying) PLAY else PAUSE)
         updateWidget(toPlaying)
         createNotification(toPlaying)
+        getPrefs().edit().putBoolean("isPlaying", toPlaying).apply()
         if (doUpdatePref) {
             getPrefs().edit().putBoolean("wasPlaying", toPlaying).apply()
         }

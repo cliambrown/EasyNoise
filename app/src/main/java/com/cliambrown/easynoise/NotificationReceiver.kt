@@ -11,15 +11,9 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
         val actions = arrayOf(PLAY, PAUSE, TOGGLE_PLAY, DISMISS, VOLUME_UP, VOLUME_DOWN)
-        if (!actions.contains(action)) {
+        if (!actions.contains(action) || action == null) {
             return
         }
-        val newIntent = Intent(context, PlayerService::class.java)
-        newIntent.setAction(action)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(newIntent)
-        } else {
-            context.startService(newIntent)
-        }
+        Util.startPlayerService(context, action)
     }
 }

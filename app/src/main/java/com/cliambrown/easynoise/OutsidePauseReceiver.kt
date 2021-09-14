@@ -6,7 +6,6 @@ import android.content.Intent
 import android.media.AudioManager
 import android.os.Build
 import android.telephony.TelephonyManager
-//import android.widget.Toast
 import com.cliambrown.easynoise.helpers.*
 
 class OutsidePauseReceiver : BroadcastReceiver() {
@@ -30,7 +29,6 @@ class OutsidePauseReceiver : BroadcastReceiver() {
                 setPlaying = (state == "IDLE")
             }
             AudioManager.ACTION_AUDIO_BECOMING_NOISY -> {
-//                Toast.makeText(context, "ACTION_AUDIO_BECOMING_NOISY", Toast.LENGTH_SHORT).show()
                 setPlaying = false
                 doUpdate = true
             }
@@ -54,18 +52,11 @@ class OutsidePauseReceiver : BroadcastReceiver() {
             }
         }
 
-        if (!doUpdate) return
+        if (!doUpdate) {
+            return
+        }
 
-        val newIntent = Intent(context, PlayerService::class.java)
-        if (setPlaying) {
-            newIntent.setAction(OUTSIDE_PLAY)
-        } else {
-            newIntent.setAction(OUTSIDE_PAUSE)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(newIntent)
-        } else {
-            context.startService(newIntent)
-        }
+        val playerAction = if (setPlaying) OUTSIDE_PLAY else OUTSIDE_PAUSE
+        Util.startPlayerService(context, playerAction)
     }
 }

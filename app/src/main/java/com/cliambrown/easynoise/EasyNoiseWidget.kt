@@ -28,11 +28,11 @@ class EasyNoiseWidget : AppWidgetProvider() {
     }
 
     override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
+        // Relevant functionality for when the first widget is created
     }
 
     override fun onDisabled(context: Context) {
-        // Enter relevant functionality for when the last widget is disabled
+        // Relevant functionality for when the last widget is disabled
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -46,34 +46,21 @@ class EasyNoiseWidget : AppWidgetProvider() {
     }
 
     fun togglePlay(context: Context?) {
-//        val intent = Intent(context, NotificationReceiver::class.java)
-//        intent.setAction(TOGGLE_PLAY)
-//        context?.sendBroadcast(intent)
-        val intent = Intent(context, PlayerService::class.java)
-        intent.setAction(TOGGLE_PLAY)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context?.startForegroundService(intent)
-        } else {
-            context?.startService(intent)
+        if (context == null) {
+            return
         }
+        Util.startPlayerService(context, TOGGLE_PLAY)
     }
 
     fun setPlaying(context: Context?, isPlaying: Boolean) {
-        if (context == null) return
-//        val views = RemoteViews(context.packageName, R.layout.easy_noise_widget)
+        if (context == null) {
+            return
+        }
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(ComponentName(context, EasyNoiseWidget::class.java))
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId, isPlaying)
         }
-//        if (isPlaying) {
-//            views.setViewVisibility(R.id.playIcon, View.INVISIBLE)
-//            views.setViewVisibility(R.id.pauseIcon, View.VISIBLE)
-//        } else {
-//            views.setViewVisibility(R.id.pauseIcon, View.INVISIBLE)
-//            views.setViewVisibility(R.id.playIcon, View.VISIBLE)
-//        }
-//        appWidgetManager.updateAppWidget(appWidgetIds, views)
     }
 }
 

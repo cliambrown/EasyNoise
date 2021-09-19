@@ -130,13 +130,13 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         }
     }
 
-    fun play(view: View) {
+    fun play(@Suppress("UNUSED_PARAMETER")view: View) {
         val intent = Intent(this@MainActivity, NotificationReceiver::class.java)
         intent.setAction(PLAY)
         sendBroadcast(intent)
     }
 
-    fun pause(view: View) {
+    fun pause(@Suppress("UNUSED_PARAMETER")view: View) {
         val intent = Intent(this@MainActivity, NotificationReceiver::class.java)
         intent.setAction(PAUSE)
         sendBroadcast(intent)

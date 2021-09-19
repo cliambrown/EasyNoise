@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
 
         noiseSpinner.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     val newNoise = noises[position]
                     prefs.edit().putString("noise", newNoise).apply()
                     if (serviceIsBound) {

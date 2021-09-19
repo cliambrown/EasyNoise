@@ -21,10 +21,10 @@
                   android:scaleY="0.6216279"
                   android:translateX="20.432093"
                   android:translateY="20.432093">
-                  <path android:fillColor="@color/primaryTextColor"
+                  <path android:fillColor="@color/textColor"
                       android:pathData="M 11,39 A 2 2 0 0 1 13 37 L 35 37 L 55.6 16.4 A 2 2 0 0 1 59 17.8 L 59 90.2 A 2 2 0 0 1 55.6 91.6 L 35 71 L 13 71 A 2 2 0 0 1 11 69 z" />
                   <path android:fillColor="@color/transparent"
-                      android:strokeColor="@color/primaryTextColor"
+                      android:strokeColor="@color/textColor"
                       android:strokeWidth="4"
                       android:strokeLineCap="round"
                       android:pathData="M 84 17.8 L 84 90.2"/>

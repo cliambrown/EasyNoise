@@ -106,8 +106,6 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
             .setContentIntent(pendingMainIntent)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setColor(ContextCompat.getColor(this, R.color.background))
-            .setColorized(true)
             .setCustomContentView(notificationLayout)
             .build()
 

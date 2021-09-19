@@ -12,7 +12,7 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/secondaryColor"
+        android:background="@color/primaryColor"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintTop_toTopOf="parent" />
@@ -84,8 +84,8 @@
         android:layout_marginBottom="48dp"
         android:background="@null"
         android:max="100"
-        android:progressTint="@color/secondaryLightColor"
-        android:thumbTint="@color/secondaryLightColor"
+        android:progressTint="@color/primaryLightColor"
+        android:thumbTint="@color/primaryLightColor"
         android:contentDescription="@string/adjust_volume"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="16dp" />

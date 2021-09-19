@@ -1,7 +1,11 @@
 # ![Easy Noise](https://raw.githubusercontent.com/cliambrown/EasyNoise/master/app/src/main/res/mipmap-xhdpi/launcher.png) Easy Noise
 
-A simple Android app to play white noise. Continues playing even under other audio. Includes
-a play/pause widget and seven sound options.
+A simple Android app to play white noise.
+
+* No ads or trackers of any kind
+* Free and open source
+* Continues playing even under other audio
+* Includes a play/pause widget and seven sound options
 
 Made by [C. Liam Brown](https://cliambrown.com)
 

@@ -9,7 +9,7 @@ A simple Android app to play white noise.
 
 Made by [C. Liam Brown](https://cliambrown.com)
 
-<a href='https://play.google.com/store/apps/details?id=com.cliambrown.easynoise' width="200px"><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+<a href='https://play.google.com/store/apps/details?id=com.cliambrown.easynoise'><img alt='Get it on Google Play' width="200px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
 ## Privacy & Permissions
 

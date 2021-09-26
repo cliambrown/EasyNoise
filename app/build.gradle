@@ -13,7 +13,7 @@ android {
         versionCode 2
         versionName "0.2"
 
-        setProperty("archivesBaseName", applicationId + "-v" + versionCode + "(" + versionName + ")")
+        setProperty("archivesBaseName", applicationId + "-v" + versionName)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

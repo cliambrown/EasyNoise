@@ -1,6 +1,17 @@
-# ![Easy Noise](https://raw.githubusercontent.com/cliambrown/EasyNoise/master/app/src/main/res/mipmap-xhdpi/launcher.png) Easy Noise
+<p align="center"><img src="https://raw.githubusercontent.com/cliambrown/EasyNoise/master/app/src/main/res/mipmap-xhdpi/launcher.png"></a></p>
 
-A simple Android app to play white noise.
+<h2 align="center"><b>Easy Noise</b></h2>
+
+<h4 align="center">A simple Android app to play white noise.</h4>
+
+<p align="center">
+<a href='https://play.google.com/store/apps/details?id=com.cliambrown.easynoise'><img alt='Get it on Google Play' width="200px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+</p>
+
+<p align="center">
+<a href="https://github.com/cliambrown/EasyNoise/releases" alt="GitHub release"><img src="https://img.shields.io/github/v/release/cliambrown/EasyNoise"></a>
+<a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"></a>
+</p>
 
 * No ads or trackers of any kind
 * Free and open source
@@ -8,8 +19,6 @@ A simple Android app to play white noise.
 * Includes a play/pause widget and seven sound options
 
 Made by [C. Liam Brown](https://cliambrown.com)
-
-<a href='https://play.google.com/store/apps/details?id=com.cliambrown.easynoise'><img alt='Get it on Google Play' width="200px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
 ## Privacy & Permissions
 
@@ -20,6 +29,8 @@ The app needs the "Phone" permission ("Allow Easy Noise to make and manage phone
 able to pause playback during phone calls. The usual method for handling this involves something called 
 Audio Focus, but that would mean that this app would not be able to play music beneath other sounds (such 
 as music or video). If you know of another way to solve this without the Phone permission, please let me know!
+
+The full privacy policy is available <a href="https://github.com/cliambrown/EasyNoise/blob/master/PRIVACY.md">here</a>.
 
 ## Screenshots
 

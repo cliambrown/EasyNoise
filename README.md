@@ -5,6 +5,7 @@
 <h4 align="center">A simple Android app to play white noise.</h4>
 
 <p align="center">
+<a href='https://www.f-droid.org/en/packages/com.cliambrown.easynoise/'><img alt='Get it on F-Droid' width="200px" src='https://fdroid.gitlab.io/artwork/badge/get-it-on.png'/></a>
 <a href='https://play.google.com/store/apps/details?id=com.cliambrown.easynoise'><img alt='Get it on Google Play' width="200px" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 </p>
 

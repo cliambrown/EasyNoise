@@ -67,15 +67,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        val readPhoneState =
-            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-        if (readPhoneState != PackageManager.PERMISSION_GRANTED) {
-            val mainIntent = Intent(this, MainActivity::class.java)
-            mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            this.startActivity(mainIntent)
-            return START_NOT_STICKY
-        }
-
         if (intent == null) {
             return START_NOT_STICKY
         }

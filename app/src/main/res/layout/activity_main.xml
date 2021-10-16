@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
+        android:id="@+id/noiseSpinnerContainer"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:background="@drawable/spinner_background"
@@ -49,6 +50,86 @@
             android:src="@drawable/ic_baseline_arrow_drop_down_24" />
 
     </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/showPermissionNoticeButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@color/transparent"
+        android:tint="@color/primaryLightColor"
+        android:onClick="showPhonePermissionNotice"
+        android:contentDescription="@string/pause_during_calls"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="8dp"
+        app:srcCompat="@drawable/ic_baseline_phone_paused_24"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/permissionNotice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/playButton"
+        app:layout_constraintTop_toBottomOf="@+id/noiseSpinnerContainer">
+
+        <TextView
+            android:id="@+id/needsPhonePermissionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="@string/needs_phone_permission"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/PrivacyText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/PrivacyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="@string/privacy"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/permissionButtonWrapper"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/permissionButtonWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/getPhonePermissionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primaryLightColor"
+                android:onClick="requestPhonePermission"
+                android:text="@string/request_phone_permission"
+                android:textColor="@color/black"></Button>
+
+            <Button
+                android:id="@+id/hideRequestPhonePermissionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:background="@color/transparent"
+                android:onClick="hidePhonePermissionNotice"
+                android:text="@string/dismiss"
+                android:textColor="@color/primaryLightColor"></Button>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageButton
         android:id="@+id/playButton"

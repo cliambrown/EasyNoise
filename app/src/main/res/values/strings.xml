@@ -10,6 +10,10 @@
     <string name="increase_volume">Increase the volume</string>
     <string name="adjust_volume">Adjust volume</string>
     <string name="info">Info</string>
+    <string name="request_phone_permission">Give Permission</string>
+    <string name="needs_phone_permission">In order to automatically pause playback during phone calls, this app needs the \"phone\" permission.</string>
+    <string name="privacy">This app will never make calls, and it does not store or share any information about you or your phone.</string>
+    <string name="pause_during_calls">Pause during calls</string>
 
     <string-array name="noises">
         <item>fuzz</item>

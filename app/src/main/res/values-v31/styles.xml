@@ -2,5 +2,6 @@
 
     <style name="Widget.EasyNoise.AppWidget.Container" parent="android:Widget">
         <item name="android:clipToOutline">true</item>
+        <item name="android:background">@drawable/gradient_background</item>
     </style>
 </resources>

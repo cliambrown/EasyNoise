@@ -52,19 +52,19 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
             action = VOLUME_UP
         }
         val pendingVolUpIntent: PendingIntent =
-            PendingIntent.getBroadcast(this, 0, volUpIntent, 0)
+            PendingIntent.getBroadcast(this, 0, volUpIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val volDownIntent = Intent(this, NotificationReceiver::class.java).apply {
             action = VOLUME_DOWN
         }
         val pendingVolDownIntent: PendingIntent =
-            PendingIntent.getBroadcast(this, 0, volDownIntent, 0)
+            PendingIntent.getBroadcast(this, 0, volDownIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val dismissIntent = Intent(this, NotificationReceiver::class.java).apply {
             action = DISMISS
         }
         val pendingDismissIntent: PendingIntent =
-            PendingIntent.getBroadcast(this, 0, dismissIntent, 0)
+            PendingIntent.getBroadcast(this, 0, dismissIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val notificationLayout = RemoteViews(packageName, R.layout.notification_layout)
 
@@ -74,7 +74,7 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
                 action = PAUSE
             }
             val pendingPauseIntent: PendingIntent =
-                PendingIntent.getBroadcast(this, 0, pauseIntent, 0)
+                PendingIntent.getBroadcast(this, 0, pauseIntent, PendingIntent.FLAG_IMMUTABLE)
             notificationLayout.setOnClickPendingIntent(R.id.pauseButton, pendingPauseIntent)
         } else {
             notificationLayout.setViewVisibility(R.id.pauseButton, View.GONE)
@@ -82,7 +82,7 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
                 action = PLAY
             }
             val pendingPlayIntent: PendingIntent =
-                PendingIntent.getBroadcast(this, 0, playIntent, 0)
+                PendingIntent.getBroadcast(this, 0, playIntent, PendingIntent.FLAG_IMMUTABLE)
             notificationLayout.setOnClickPendingIntent(R.id.playButton, pendingPlayIntent)
         }
 
@@ -93,7 +93,7 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
         val mainIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingMainIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0)
+        val pendingMainIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val smallIcon = if (isPlaying) R.drawable.notification_icon else R.drawable.paused_notification_icon
         if (!isPlaying) {

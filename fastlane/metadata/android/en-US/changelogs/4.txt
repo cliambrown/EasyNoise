@@ -1,0 +1,3 @@
+- Fix crash when playing on Android 12
+- Fix notification layout on Android 12
+- Fix widget background on Android 12

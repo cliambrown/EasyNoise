@@ -89,7 +89,7 @@ internal fun updateAppWidget(
 
     val togglePlayIntent = Intent(context, EasyNoiseWidget::class.java)
     togglePlayIntent.setAction(TOGGLE_PLAY)
-    val pendingTogglePlayIntent = PendingIntent.getBroadcast(context, 0, togglePlayIntent, 0)
+    val pendingTogglePlayIntent = PendingIntent.getBroadcast(context, 0, togglePlayIntent, PendingIntent.FLAG_IMMUTABLE)
     views.setOnClickPendingIntent(R.id.widgetLayout, pendingTogglePlayIntent)
 
     // Instruct the widget manager to update the widget

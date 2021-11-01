@@ -1,0 +1,2 @@
+- Correction du widget qui ne répond plus
+- Continuer la lecture lorsque l'utilisateur passe des écouteurs filaires aux écouteurs Bluetooth

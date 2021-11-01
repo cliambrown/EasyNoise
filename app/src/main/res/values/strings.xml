@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
     <string name="app_name">Easy Noise</string>
     <string name="channel_name">Easy Noise notification</string>
     <string name="channel_description">Controller notification for Easy Noise</string>
@@ -14,14 +14,14 @@
     <string name="needs_phone_permission">In order to automatically pause playback during phone calls, this app needs the \"phone\" permission.</string>
     <string name="privacy">This app will never make calls, and it does not store or share any information about you or your phone.</string>
     <string name="pause_during_calls">Pause during calls</string>
+    <string name="load_error">"Error loading sound</string>
 
-    <string-array name="noises">
-        <item>fuzz</item>
-        <item>grey</item>
-        <item>grey 2</item>
-        <item>white</item>
-        <item>pink</item>
-        <item>brown</item>
-        <item>blue</item>
-    </string-array>
+    <string name="fuzz" translatable="false">fuzz</string>
+    <string name="gray">gray</string>
+    <string name="gray_2">gray 2</string>
+    <string name="white">white</string>
+    <string name="pink">pink</string>
+    <string name="brown">brown</string>
+    <string name="blue">blue</string>
+
 </resources>

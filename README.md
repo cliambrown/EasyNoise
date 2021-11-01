@@ -28,7 +28,7 @@ any data of any kind other than the current volume level and selected sound.
 
 The app needs the "Phone" permission ("Allow Easy Noise to make and manage phone calls?") ONLY to be
 able to pause playback during phone calls. The usual method for handling this involves something called 
-Audio Focus, but that would mean that this app would not be able to play music beneath other sounds (such 
+Audio Focus, but that would mean that this app would not be able to play noise beneath other sounds (such 
 as music or video). If you know of another way to solve this without the Phone permission, please let me know!
 
 The full privacy policy is available <a href="https://github.com/cliambrown/EasyNoise/blob/master/PRIVACY.md">here</a>.

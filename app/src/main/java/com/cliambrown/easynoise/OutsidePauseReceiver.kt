@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
-import android.os.Build
 import android.telephony.TelephonyManager
 import com.cliambrown.easynoise.helpers.*
 
@@ -12,51 +11,44 @@ class OutsidePauseReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
-        val prefs = context.getSharedPreferences(context.packageName, 0)
-        val wasPlaying = prefs.getBoolean("wasPlaying", false)
-        if (!wasPlaying) return
-
-        var doUpdate = false
-        var setPlaying = false
-
         val action = intent.action
+        var playerAction: String? = null
+
         when (action) {
             PHONE_STATE -> {
                 // Phone call start/stop
                 val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
                 val states = arrayOf("IDLE", "RINGING", "OFFHOOK")
-                doUpdate = (states.contains(state))
-                setPlaying = (state == "IDLE")
+                if (!states.contains(state)) return
+                if (state == "IDLE") {
+                    playerAction = CALL_ENDED
+                } else {
+                    playerAction = CALL_STARTED
+                }
             }
             AudioManager.ACTION_AUDIO_BECOMING_NOISY -> {
-                setPlaying = false
-                doUpdate = true
+                // Headphones unplugged / disconnected
+                playerAction = AUDIO_BECOMING_NOISY
             }
             HEADSET_PLUG -> {
                 // Wired headset monitoring
                 val state = intent.getIntExtra("state", 0)
-                setPlaying = (state > 0)
-                doUpdate = setPlaying
+                if (state > 0) playerAction = HEADPHONES_CONNECTED
             }
             HEADSET_STATE_CHANGED -> {
                 // Bluetooth monitoring
                 val state = intent.getIntExtra("android.bluetooth.headset.extra.STATE", 0)
-                setPlaying = (state == 2)
-                doUpdate = setPlaying
+                if (state == 2) playerAction = HEADPHONES_CONNECTED
             }
             CONNECTION_STATE_CHANGED -> {
                 // Bluetooth, works for Ice Cream Sandwich
                 val state = intent.getIntExtra("android.bluetooth.profile.extra.STATE", 0)
-                setPlaying = (state == 2)
-                doUpdate = setPlaying
+                if (state == 2) playerAction = HEADPHONES_CONNECTED
             }
         }
 
-        if (!doUpdate) {
-            return
+        if (playerAction != null) {
+            Util.startPlayerService(context, playerAction)
         }
-
-        val playerAction = if (setPlaying) OUTSIDE_PLAY else OUTSIDE_PAUSE
-        Util.startPlayerService(context, playerAction)
     }
 }

@@ -1,0 +1,2 @@
+- Fix logic for unpausing after phone calls & connecting headphones
+- Add locales: en-GB, en-CA, fr, fr-CA

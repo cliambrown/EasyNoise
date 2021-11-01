@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Easy Noise</string>
+    <string name="channel_name">notification pour Easy Noise</string>
+    <string name="channel_description">Notification pour contrôler Easy Noise</string>
+    <string name="play">Démarrer</string>
+    <string name="pause">Pause</string>
+    <string name="dismiss">Fermer</string>
+    <string name="app_widget_description">Widget Easy Noise</string>
+    <string name="lower_volume">Baisser le volume</string>
+    <string name="increase_volume">Augmenter le volume</string>
+    <string name="adjust_volume">Ajuster le volume</string>
+    <string name="info">Infos</string>
+    <string name="request_phone_permission">Donner la permission</string>
+    <string name="needs_phone_permission">Afin de mettre automatiquement en pause le bruit blanc pendant les appels, cette application a besoin de l\'autorisation \"téléphone\".</string>
+    <string name="privacy">Cette application ne fera jamais d\'appels, et elle ne garde ni ne partage aucune information sur vous ou votre téléphone.</string>
+    <string name="pause_during_calls">Pause pendant les appels</string>
+    <string name="load_error">Erreur de chargement du son</string>
+    <string name="gray">gris</string>
+    <string name="gray_2">gris 2</string>
+    <string name="white">blanc</string>
+    <string name="pink">rose</string>
+    <string name="brown">brun</string>
+    <string name="blue">bleu</string>
+</resources>

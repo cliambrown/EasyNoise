@@ -1,0 +1,1 @@
+- Add message prompting user to request Phone permission to main screen (instead of asking automatically as soon as the app is opened, which seemed annoying in retrospect)

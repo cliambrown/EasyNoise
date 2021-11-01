@@ -1,0 +1,3 @@
+- Correction du crash lors de la lecture sur Android 12
+- Correction de la présentation des notifications sur Android 12
+- Correction de l'arrière-plan des widgets sur Android 12

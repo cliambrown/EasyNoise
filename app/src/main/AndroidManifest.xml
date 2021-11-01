@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cliambrown.easynoise"
-    android:versionCode="4"
-    android:versionName="0.4">
+    android:versionCode="5"
+    android:versionName="0.5">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -54,8 +54,10 @@
                 <action android:name="com.cliambrown.easynoise.action.DISMISS" />
                 <action android:name="com.cliambrown.easynoise.action.VOLUME_UP" />
                 <action android:name="com.cliambrown.easynoise.action.VOLUME_DOWN" />
-                <action android:name="com.cliambrown.easynoise.action.OUTSIDE_PLAY" />
-                <action android:name="com.cliambrown.easynoise.action.OUTSIDE_PAUSE" />
+                <action android:name="com.cliambrown.easynoise.action.CALL_STARTED" />
+                <action android:name="com.cliambrown.easynoise.action.CALL_ENDED" />
+                <action android:name="com.cliambrown.easynoise.action.AUDIO_BECOMING_NOISY" />
+                <action android:name="com.cliambrown.easynoise.action.HEADPHONES_CONNECTED" />
             </intent-filter>
         </service>
 

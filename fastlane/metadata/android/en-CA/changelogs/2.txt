@@ -1,0 +1,2 @@
+- Fix widget becoming unresponsive
+- Keep playing when switching between wired & bluetooth headphones

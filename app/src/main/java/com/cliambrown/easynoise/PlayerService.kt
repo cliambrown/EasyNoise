@@ -1,19 +1,16 @@
 package com.cliambrown.easynoise
 
-import android.Manifest
 import android.app.Activity
 import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Binder
 import android.os.IBinder
 import com.cliambrown.easynoise.helpers.*
-import androidx.core.content.ContextCompat
 import android.widget.Toast
 import kotlin.math.roundToInt
 
@@ -29,9 +26,13 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     var streamID: Int? = -1
     var isLoading: Boolean = false
     var streamLoaded: Boolean = false
-    var isPlaying: Boolean = false
+    private var isPlaying: Boolean = false
+    var wasPlaying: Boolean = false
     var lastAction: String? = null
     var notificationUtils: NotificationUtils? = null
+
+    var onPhoneCall = false
+    var audioIsNoisy = false
 
     var outsidePauseReceiver: OutsidePauseReceiver? = null
 
@@ -44,7 +45,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         mActivity = activity as Callbacks
     }
 
-    //callbacks interface for communication with service clients!
+    // callbacks interface for communication with service clients!
     interface Callbacks {
         fun updateClient(action: String)
     }
@@ -54,6 +55,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     override fun onCreate() {
+        wasPlaying = getPrefs().getBoolean("wasPlaying", false)
         outsidePauseReceiver = OutsidePauseReceiver()
         val filter = IntentFilter()
         filter.addAction(PHONE_STATE)
@@ -77,10 +79,24 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             PAUSE -> pause()
             TOGGLE_PLAY -> togglePlay()
             DISMISS -> dismiss()
-            OUTSIDE_PLAY -> play(false)
-            OUTSIDE_PAUSE -> pause(false)
             VOLUME_UP -> updateVolume(+5)
             VOLUME_DOWN -> updateVolume(-5)
+            CALL_STARTED -> {
+                onPhoneCall = true
+                if (isPlaying) pause(false)
+            }
+            CALL_ENDED -> {
+                onPhoneCall = false
+                if (wasPlaying && !audioIsNoisy) play(false)
+            }
+            AUDIO_BECOMING_NOISY -> {
+                audioIsNoisy = true
+                if (isPlaying) pause(false)
+            }
+            HEADPHONES_CONNECTED -> {
+                audioIsNoisy = false
+                if (wasPlaying && !onPhoneCall) play(false)
+            }
         }
 
         return START_NOT_STICKY
@@ -105,6 +121,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     override fun onDestroy() {
+        pause()
         unregisterReceiver(outsidePauseReceiver)
         if (streamID != null && streamID!! > 0) {
             soundPool?.stop(streamID!!)
@@ -138,13 +155,13 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         val noise = getPrefs().getString("noise", "fuzz")
         currentNoise = noise
         var resource: Int = when (noise) {
-            "fuzz" -> R.raw.fuzz
-            "grey" -> R.raw.grey_noise
-            "grey 2" -> R.raw.grey_noise_2
-            "white" -> R.raw.white_noise
-            "pink" -> R.raw.pink_noise
-            "brown" -> R.raw.brown_noise
-            "blue" -> R.raw.blue_noise
+            resources.getString(R.string.fuzz) -> R.raw.fuzz
+            resources.getString(R.string.gray) -> R.raw.grey_noise
+            resources.getString(R.string.gray_2) -> R.raw.grey_noise_2
+            resources.getString(R.string.white) -> R.raw.white_noise
+            resources.getString(R.string.pink) -> R.raw.pink_noise
+            resources.getString(R.string.brown) -> R.raw.brown_noise
+            resources.getString(R.string.blue) -> R.raw.blue_noise
             else -> -1
         }
         if (resource > 0) {
@@ -159,7 +176,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             if (lastAction.equals("play")) playLoaded()
         } else {
             val toast = Toast.makeText(applicationContext,
-                "Error loading sound",
+                resources.getString(R.string.load_error),
                 Toast.LENGTH_SHORT)
             toast.show()
         }
@@ -206,6 +223,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         createNotification(toPlaying)
         getPrefs().edit().putBoolean("isPlaying", toPlaying).apply()
         if (doUpdatePref) {
+            wasPlaying = toPlaying
             getPrefs().edit().putBoolean("wasPlaying", toPlaying).apply()
         }
     }
@@ -245,13 +263,13 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     fun noiseChanged() {
         val newNoise = getPrefs().getString("noise", "fuzz")
         if (newNoise.equals(currentNoise)) return
-        val wasPlaying = isPlaying
-        if (wasPlaying) pause(false)
+        val tempIsPlaying = isPlaying
+        if (tempIsPlaying) pause(false)
         if (streamLoaded) {
             soundPool?.stop(streamID!!)
             soundPool?.unload(soundID)
             streamLoaded = false
         }
-        if (wasPlaying) play(false)
+        if (tempIsPlaying) play(false)
     }
 }

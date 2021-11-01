@@ -1,0 +1,1 @@
+- Ajout d'un message invitant l'utilisateur à demander l'autorisation "Téléphone" sur l'écran principal (au lieu de le demander automatiquement dès l'ouverture de l'application, ce qui semblait gênant rétrospectivement).

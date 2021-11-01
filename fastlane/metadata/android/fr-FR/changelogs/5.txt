@@ -1,0 +1,2 @@
+- Correction de la logique de reprise de la lecture après des appels téléphoniques et la connexion d'écouteurs
+- Ajout de locales : en-GB, en-CA, fr, fr-CA

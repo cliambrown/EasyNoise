@@ -27,9 +27,6 @@ import android.view.animation.TranslateAnimation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AccelerateDecelerateInterpolator
 
-
-
-
 class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSeekBarChangeListener {
 
     lateinit var showPermissionNoticeButton: ImageButton
@@ -88,7 +85,15 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         val noise = prefs.getString("noise", "fuzz")
 
         noiseSpinner = findViewById(R.id.noiseSpinner)
-        noises = resources.getStringArray(R.array.noises)
+        noises = arrayOf(
+            resources.getString(R.string.fuzz),
+            resources.getString(R.string.gray),
+            resources.getString(R.string.gray_2),
+            resources.getString(R.string.white),
+            resources.getString(R.string.pink),
+            resources.getString(R.string.brown),
+            resources.getString(R.string.blue),
+        )
         val adapter = ArrayAdapter(
             this,
             R.layout.spinner_list, noises
@@ -223,90 +228,6 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
                 }
             }
         }
-
-
-
-
-
-
-//        if (granted || !showNotice) {
-//            val mPP = findViewById(R.id.missingPhonePermission) as ConstraintLayout
-//            val button = findViewById(R.id.showRequestPhonePermissionButton) as ImageButton
-//            mPP.setVisibility(View.GONE)
-//            button.setVisibility(View.INVISIBLE)
-//        }
-//        if (!granted) {
-//            val mPP = findViewById(R.id.missingPhonePermission) as ConstraintLayout
-//            val button = findViewById(R.id.showRequestPhonePermissionButton) as ImageButton
-//            var buttonX = 0.0f
-//            var buttonY = 0.0f
-//            val duration: Long = 1000
-//            if (animate) {
-////                button.setVisibility(View.INVISIBLE)
-//                val locs = getCenterXYf(button)
-//                buttonX = locs[0]
-//                buttonY = locs[1]
-//            }
-//            if (showNotice) {
-//                if (animate) {
-//                    mPP.setVisibility(View.INVISIBLE)
-//                    val anim = AnimationSet(true)
-//                    anim.setFillAfter(true)
-//                    val scale = ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f)
-//                    scale.setDuration(duration)
-//                    val locs = getCenterXYf(mPP)
-//                    val xDelta = buttonX - locs[0]
-//                    val yDelta = buttonY - locs[1]
-//                    val trans = TranslateAnimation(xDelta,0.0f,yDelta,0.0f)
-//                    trans.setDuration(duration)
-//                    anim.addAnimation(scale)
-//                    anim.addAnimation(trans)
-//                    anim.setAnimationListener(object : AnimationListener {
-//                        override fun onAnimationStart(p0: Animation?) {
-//                            mPP.setVisibility(View.VISIBLE)
-//                            button.setVisibility(View.INVISIBLE)
-//                        }
-//                        override fun onAnimationRepeat(p0: Animation?) {}
-//                        override fun onAnimationEnd(animation: Animation) {
-//                            mPP.clearAnimation()
-//                        }
-//                    })
-//                    mPP.startAnimation(anim)
-//                } else {
-//                    mPP.setVisibility(View.VISIBLE)
-//                    button.setVisibility(View.INVISIBLE)
-//                }
-//            } else {
-//                if (animate) {
-//                    val anim = AnimationSet(true)
-//                    anim.setFillAfter(true)
-//                    val scale = ScaleAnimation(1.0f, 0.0f, 1.0f, 0.0f)
-//                    scale.setDuration(duration)
-//                    val locs = getCenterXYf(mPP)
-//                    val xDelta = buttonX - locs[0]
-//                    val yDelta = buttonY - locs[1]
-//                    val trans = TranslateAnimation(0.0f,xDelta,0.0f,yDelta)
-//                    trans.setDuration(duration)
-//                    anim.addAnimation(scale)
-//                    anim.addAnimation(trans)
-//                    anim.setAnimationListener(object : AnimationListener {
-//                        override fun onAnimationStart(p0: Animation?) {}
-//                        override fun onAnimationRepeat(p0: Animation?) {}
-//                        override fun onAnimationEnd(animation: Animation) {
-//                            mPP.clearAnimation()
-//                            mPP.setVisibility(View.GONE)
-//                            button.setVisibility(View.VISIBLE)
-//                        }
-//                    })
-//                    mPP.startAnimation(anim)
-//                } else {
-//                    mPP.setVisibility(View.GONE)
-//                    button.setVisibility(View.VISIBLE)
-//                }
-//            }
-//        }
-
-
     }
 
     fun requestPhonePermission(@Suppress("UNUSED_PARAMETER")view: View) {

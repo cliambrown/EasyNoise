@@ -9,10 +9,16 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
+import android.service.quicksettings.TileService
 import com.cliambrown.easynoise.helpers.*
 import android.widget.Toast
 import kotlin.math.roundToInt
+import android.content.ComponentName
+
+
+
 
 class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
 
@@ -226,6 +232,12 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             wasPlaying = toPlaying
             getPrefs().edit().putBoolean("wasPlaying", toPlaying).apply()
         }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            TileService.requestListeningState(
+//                this,
+//                ComponentName(this, QSTileService::class.java.getName())
+//            )
+//        }
     }
 
     fun dismiss() {

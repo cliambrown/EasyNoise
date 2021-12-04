@@ -2,6 +2,7 @@ package com.cliambrown.easynoise
 
 import android.app.Activity
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
@@ -9,6 +10,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import com.cliambrown.easynoise.helpers.*
 import android.widget.Toast
@@ -271,5 +273,15 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             streamLoaded = false
         }
         if (tempIsPlaying) play(false)
+    }
+
+    companion object {
+        fun start(context: Context, action: String): Boolean {
+            Intent(context, PlayerService::class.java).setAction(action).run {
+                if (Build.VERSION.SDK_INT < 26) context.startService(this)
+                else context.startForegroundService(this)
+            }
+            return true
+        }
     }
 }

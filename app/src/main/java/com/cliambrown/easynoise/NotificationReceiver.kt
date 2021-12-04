@@ -3,7 +3,6 @@ package com.cliambrown.easynoise
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import com.cliambrown.easynoise.helpers.*
 
 class NotificationReceiver : BroadcastReceiver() {
@@ -14,6 +13,6 @@ class NotificationReceiver : BroadcastReceiver() {
         if (!actions.contains(action) || action == null) {
             return
         }
-        Util.startPlayerService(context, action)
+        PlayerService.start(context, action)
     }
 }

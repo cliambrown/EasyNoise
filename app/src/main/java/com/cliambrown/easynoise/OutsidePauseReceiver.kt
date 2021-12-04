@@ -48,7 +48,7 @@ class OutsidePauseReceiver : BroadcastReceiver() {
         }
 
         if (playerAction != null) {
-            Util.startPlayerService(context, playerAction)
+            PlayerService.start(context, playerAction)
         }
     }
 }

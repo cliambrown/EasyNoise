@@ -15,6 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EasyNoise">
 
+        <service
+            android:name=".QSTileService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:icon="@drawable/notification_icon"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+        </service>
+
         <receiver
             android:name=".OutsidePauseReceiver"
             android:enabled="true"
@@ -27,7 +41,6 @@
                 <action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".EasyNoiseWidget"
             android:exported="true">
@@ -80,10 +93,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

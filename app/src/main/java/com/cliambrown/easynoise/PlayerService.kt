@@ -2,6 +2,7 @@ package com.cliambrown.easynoise
 
 import android.app.Activity
 import android.app.Service
+import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
@@ -9,8 +10,9 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
-import android.util.Log
+import android.service.quicksettings.TileService
 import com.cliambrown.easynoise.helpers.*
 import android.widget.Toast
 import kotlin.math.roundToInt
@@ -43,7 +45,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun registerClient(activity: Activity) {
-        Log.i("clb-info", "PlayerService registerClient")
         mActivity = activity as Callbacks
     }
 
@@ -57,7 +58,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     override fun onCreate() {
-        Log.i("clb-info", "PlayerService onCreate")
         wasPlaying = getPrefs().getBoolean("wasPlaying", false)
         outsidePauseReceiver = OutsidePauseReceiver()
         val filter = IntentFilter()
@@ -71,15 +71,12 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.i("clb-info", "PlayerService onStartCommand")
 
         if (intent == null) {
             return START_NOT_STICKY
         }
-        Log.i("clb-info", "PlayerService test1")
 
         val action = intent.action
-        Log.i("clb-info", "action = " + action)
         when (action) {
             PLAY -> play()
             PAUSE -> pause()
@@ -100,20 +97,15 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
                 if (isPlaying) pause(false)
             }
             HEADPHONES_CONNECTED -> {
-                Log.i("clb-info", "PlayerService test2")
                 audioIsNoisy = false
-                Log.i("clb-info", "wasPlaying = " + wasPlaying.toString())
-                Log.i("clb-info", "onPhoneCall = " + onPhoneCall.toString())
                 if (wasPlaying && !onPhoneCall) play(false)
             }
         }
-        Log.i("clb-info", "PlayerService test3")
 
         return START_NOT_STICKY
     }
 
     fun createNotification(isPlaying: Boolean) {
-        Log.i("clb-info", "PlayerService createNotification")
         if (notificationUtils == null) {
             notificationUtils = NotificationUtils(this)
         }
@@ -122,7 +114,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun updateWidget(toIsPlaying: Boolean) {
-        Log.i("clb-info", "PlayerService updateWidget")
         val newIntent = Intent(this, EasyNoiseWidget::class.java)
         if (toIsPlaying) {
             newIntent.setAction(SET_PLAYING)
@@ -133,7 +124,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     override fun onDestroy() {
-        Log.i("clb-info", "PlayerService onDestroy")
         pause()
         unregisterReceiver(outsidePauseReceiver)
         if (streamID != null && streamID!! > 0) {
@@ -147,7 +137,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun initSoundPool() {
-        Log.i("clb-info", "PlayerService initSoundPool")
         if (isLoading) return
         isLoading = true
         if (soundPool == null) {
@@ -166,10 +155,9 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun loadNoise() {
-        Log.i("clb-info", "PlayerService loadNoise")
         val noise = getPrefs().getString("noise", "fuzz")
         currentNoise = noise
-        var resource: Int = when (noise) {
+        val resource: Int = when (noise) {
             resources.getString(R.string.fuzz) -> R.raw.fuzz
             resources.getString(R.string.gray) -> R.raw.grey_noise
             resources.getString(R.string.gray_2) -> R.raw.grey_noise_2
@@ -185,7 +173,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     override fun onLoadComplete(pSoundPool: SoundPool, pSampleID: Int, status: Int) {
-        Log.i("clb-info", "PlayerService onLoadComplete")
         streamLoaded = (soundID > 0)
         isLoading = false
         if (streamLoaded) {
@@ -199,19 +186,16 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun playLoaded() {
-        Log.i("clb-info", "PlayerService playLoaded")
         val floatVol = updateVolume()
         streamID = soundPool?.play(soundID, floatVol, floatVol, 1, -1, 1.0F)
         isPlaying = true
     }
 
     fun getIsPlaying(): Boolean {
-        Log.i("clb-info", "PlayerService getIsPlaying")
         return isPlaying
     }
 
     fun togglePlay() {
-        Log.i("clb-info", "PlayerService togglePlay")
         if (!isPlaying && !isLoading) {
             play()
         } else {
@@ -220,7 +204,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun play(doUpdatePref: Boolean = true) {
-        Log.i("clb-info", "PlayerService play")
         lastAction = "play"
         if (streamLoaded) {
             playLoaded()
@@ -231,7 +214,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun pause(doUpdatePref: Boolean = true) {
-        Log.i("clb-info", "PlayerService pause")
         lastAction = "pause"
         soundPool?.autoPause()
         isPlaying = false
@@ -239,7 +221,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun onPlayChanged(toPlaying: Boolean, doUpdatePref: Boolean) {
-        Log.i("clb-info", "PlayerService onPlayChanged")
         mActivity?.updateClient(if (toPlaying) PLAY else PAUSE)
         updateWidget(toPlaying)
         createNotification(toPlaying)
@@ -248,10 +229,15 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             wasPlaying = toPlaying
             getPrefs().edit().putBoolean("wasPlaying", toPlaying).apply()
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TileService.requestListeningState(
+                this,
+                ComponentName(this, QSTileService::class.java.getName())
+            )
+        }
     }
 
     fun dismiss() {
-        Log.i("clb-info", "PlayerService dismiss")
         mActivity?.updateClient(DISMISS)
         pause()
         stopForeground(true)
@@ -260,7 +246,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
 
     @JvmName("getPrefs1")
     fun getPrefs(): SharedPreferences {
-        Log.i("clb-info", "PlayerService getPrefs")
         if (prefs == null) {
             prefs = getSharedPreferences(applicationContext.packageName, 0)
         }
@@ -268,7 +253,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun updateVolume(adjustBy: Int? = null): Float {
-        Log.i("clb-info", "PlayerService updateVolume")
         var volume = getPrefs().getInt("volume", 50).toDouble()
         val maxVolume = 100.0
         if (adjustBy != null) {
@@ -286,7 +270,6 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     }
 
     fun noiseChanged() {
-        Log.i("clb-info", "PlayerService noiseChanged")
         val newNoise = getPrefs().getString("noise", "fuzz")
         if (newNoise.equals(currentNoise)) return
         val tempIsPlaying = isPlaying

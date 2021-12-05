@@ -10,8 +10,6 @@ import android.widget.RemoteViews
 import com.cliambrown.easynoise.helpers.*
 import android.app.PendingIntent
 import android.content.ComponentName
-import android.os.Build
-import android.util.Log
 
 /**
  * Implementation of App Widget functionality.
@@ -37,7 +35,6 @@ class EasyNoiseWidget : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.i("clb-info", "EasyNoiseWidget onReceive")
         val action = intent?.action
         when (action) {
             TOGGLE_PLAY -> togglePlay(context)
@@ -48,7 +45,6 @@ class EasyNoiseWidget : AppWidgetProvider() {
     }
 
     fun togglePlay(context: Context?) {
-        Log.i("clb-info", "EasyNoiseWidget togglePlay")
         if (context == null) {
             return
         }
@@ -56,7 +52,6 @@ class EasyNoiseWidget : AppWidgetProvider() {
     }
 
     fun setPlaying(context: Context?, isPlaying: Boolean) {
-        Log.i("clb-info", "EasyNoiseWidget setPlaying")
         if (context == null) {
             return
         }
@@ -75,7 +70,6 @@ internal fun updateAppWidget(
     appWidgetId: Int,
     _isPlaying: Boolean? = null
 ) {
-    Log.i("clb-info", "EasyNoiseWidget updateAppWidget")
     // Construct the RemoteViews object
     val views = RemoteViews(context.packageName, R.layout.easy_noise_widget)
 

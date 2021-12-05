@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -30,6 +31,7 @@ class NotificationUtils(base: Context?) : ContextWrapper(base) {
     }
 
     fun createNotificationChannel() {
+        Log.i("clb-info", "NotificationUtils createNotificationChannel")
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

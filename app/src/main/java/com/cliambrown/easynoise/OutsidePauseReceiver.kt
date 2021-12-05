@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.telephony.TelephonyManager
+import android.util.Log
 import com.cliambrown.easynoise.helpers.*
 
 class OutsidePauseReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        Log.i("clb-info", "OutsidePauseReceiver onReceive")
 
         val action = intent.action
         var playerAction: String? = null

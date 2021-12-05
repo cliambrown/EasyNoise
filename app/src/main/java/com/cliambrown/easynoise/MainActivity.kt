@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     private val connection = object : ServiceConnection {
 
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            Log.i("clb-info", "onServiceConnected")
             // We've bound to PlayerService, cast the IBinder and get PlayerService instance
             val binder = service as PlayerService.LocalBinder
             playerService = binder.getService()
@@ -54,16 +55,20 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
+            Log.i("clb-info", "onServiceDisconnected")
             serviceIsBound = false
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        Log.i("clb-info", "onCreateOptionsMenu")
         getMenuInflater().inflate(R.menu.main_toolbar, menu)
+        Log.i("clb-info", "test")
         return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i("clb-info", "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.my_toolbar))
@@ -121,6 +126,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     }
 
     override fun onStart() {
+        Log.i("clb-info", "onStart")
         super.onStart()
         // Bind to LocalService
         Intent(this, PlayerService::class.java).also { intent ->
@@ -129,6 +135,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     }
 
     override fun onStop() {
+        Log.i("clb-info", "onStop")
         super.onStop()
         unbindService(connection)
         serviceIsBound = false
@@ -156,6 +163,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     }
 
     fun updateHasPhonePermission(animate: Boolean = false) {
+        Log.i("clb-info", "updateHasPhonePermission")
         val readPhoneState =
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
         val granted = (readPhoneState == PackageManager.PERMISSION_GRANTED)
@@ -231,6 +239,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     }
 
     fun requestPhonePermission(@Suppress("UNUSED_PARAMETER")view: View) {
+        Log.i("clb-info", "requestPhonePermission")
         val readPhoneState =
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
         if (readPhoneState != PackageManager.PERMISSION_GRANTED) {
@@ -271,6 +280,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     }
 
     override fun updateClient(action: String) {
+        Log.i("clb-info", "updateClient")
         when (action) {
             PLAY -> setButtonsVisibility(true)
             PAUSE -> setButtonsVisibility(false)
@@ -280,6 +290,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     }
 
     fun setButtonsVisibility(isPlaying: Boolean) {
+        Log.i("clb-info", "setButtonsVisibility")
         if (isPlaying) {
             pauseButton.setVisibility(View.VISIBLE)
             playButton.setVisibility(View.GONE)
@@ -290,6 +301,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
     }
 
     fun volumeChanged() {
+        Log.i("clb-info", "volumeChanged")
         val volume = prefs.getInt("volume", 50)
         volumeBar.setProgress(volume)
     }
@@ -298,15 +310,18 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         seekBar: SeekBar?, progress: Int,
         fromUser: Boolean,
     ) {
+        Log.i("clb-info", "onProgressChanged")
         prefs.edit().putInt("volume", progress).apply()
         if (serviceIsBound) playerService.updateVolume()
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
+        Log.i("clb-info", "onStartTrackingTouch")
         // Needed for some reason
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        Log.i("clb-info", "onProgressChanged")
         // Needed for some reason
     }
 

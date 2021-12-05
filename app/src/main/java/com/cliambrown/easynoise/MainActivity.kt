@@ -1,7 +1,6 @@
 package com.cliambrown.easynoise
 
 import android.Manifest
-import android.animation.AnimatorListenerAdapter
 import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,7 +16,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.Menu
 import android.view.animation.Animation
 import androidx.constraintlayout.widget.ConstraintLayout

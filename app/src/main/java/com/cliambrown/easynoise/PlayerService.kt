@@ -3,6 +3,7 @@ package com.cliambrown.easynoise
 import android.app.Activity
 import android.app.Service
 import android.content.Context
+import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
@@ -12,6 +13,7 @@ import android.media.SoundPool
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.service.quicksettings.TileService
 import com.cliambrown.easynoise.helpers.*
 import android.widget.Toast
 import kotlin.math.roundToInt
@@ -37,6 +39,16 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     var audioIsNoisy = false
 
     var outsidePauseReceiver: OutsidePauseReceiver? = null
+
+    companion object {
+        fun start(context: Context, action: String): Boolean {
+            Intent(context, PlayerService::class.java).setAction(action).run {
+                if (Build.VERSION.SDK_INT < 26) context.startService(this)
+                else context.startForegroundService(this)
+            }
+            return true
+        }
+    }
 
     inner class LocalBinder : Binder() {
         // Return this instance of LocalService so clients can call public methods
@@ -156,7 +168,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
     fun loadNoise() {
         val noise = getPrefs().getString("noise", "fuzz")
         currentNoise = noise
-        var resource: Int = when (noise) {
+        val resource: Int = when (noise) {
             resources.getString(R.string.fuzz) -> R.raw.fuzz
             resources.getString(R.string.gray) -> R.raw.grey_noise
             resources.getString(R.string.gray_2) -> R.raw.grey_noise_2
@@ -228,6 +240,12 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             wasPlaying = toPlaying
             getPrefs().edit().putBoolean("wasPlaying", toPlaying).apply()
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TileService.requestListeningState(
+                this,
+                ComponentName(this, QSTileService::class.java.getName())
+            )
+        }
     }
 
     fun dismiss() {
@@ -273,15 +291,5 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             streamLoaded = false
         }
         if (tempIsPlaying) play(false)
-    }
-
-    companion object {
-        fun start(context: Context, action: String): Boolean {
-            Intent(context, PlayerService::class.java).setAction(action).run {
-                if (Build.VERSION.SDK_INT < 26) context.startService(this)
-                else context.startForegroundService(this)
-            }
-            return true
-        }
     }
 }

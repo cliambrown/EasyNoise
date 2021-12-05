@@ -11,7 +11,6 @@ import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import com.cliambrown.easynoise.helpers.*
 
 class NotificationUtils(base: Context?) : ContextWrapper(base) {

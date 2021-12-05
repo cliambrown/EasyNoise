@@ -10,7 +10,6 @@ import android.widget.RemoteViews
 import com.cliambrown.easynoise.helpers.*
 import android.app.PendingIntent
 import android.content.ComponentName
-import android.os.Build
 
 /**
  * Implementation of App Widget functionality.
@@ -49,7 +48,7 @@ class EasyNoiseWidget : AppWidgetProvider() {
         if (context == null) {
             return
         }
-        Util.startPlayerService(context, TOGGLE_PLAY)
+        PlayerService.start(context, TOGGLE_PLAY)
     }
 
     fun setPlaying(context: Context?, isPlaying: Boolean) {

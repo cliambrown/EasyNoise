@@ -17,9 +17,9 @@
 * No ads or trackers of any kind
 * Free and open source
 * Continues playing even under other audio
-* Includes a play/pause widget and seven sound options
+* Includes a play/pause widget, a Quick Settings tile ([instructions below](#quick-settings-tile-instructions)), and seven sound options
 
-Made by [C. Liam Brown](https://cliambrown.com)
+Made by [C. Liam Brown](https://cliambrown.com). Thanks to [j-m-hoffmann](https://github.com/j-m-hoffmann) for recent contributions.
 
 ## Privacy & Permissions
 
@@ -36,6 +36,16 @@ The full privacy policy is available <a href="https://github.com/cliambrown/Easy
 ## Screenshots
 
 <a href="https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_1.png"><img src="https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_1.png" width="200px" alt="Screenshot 1"></a> <a href="https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_2.png"><img src="https://raw.githubusercontent.com/cliambrown/EasyNoise/master/easy_noise_screenshot_2.png" width="200px" alt="Screenshot 2"></a>
+
+## How to Add the Quick Settings Tile
+
+1. Swipe down from the top of the screen to show your Quick Settings.
+1. Swipe down again (if necessary) so that you see the pencil icon below the Quick Settings menu.
+1. Click the pencil icon.
+1. Scroll until you see the Easy Noise Quick Settings tile.
+1. Tap and hold the tile until you're able to drag the tile.
+1. Drag the tile up into your active tiles. **Note:** Only the first 6 tiles will appear in your menu (4 in Android 12 😠) — the rest will appear in an "overflow" menu that can be shown by expanding the menu and scrolling to one side.
+1. Click the "back" arrow at the top when you're finished arranging your menu.
 
 ## Installation
 

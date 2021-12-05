@@ -10,7 +10,6 @@ import android.widget.RemoteViews
 import com.cliambrown.easynoise.helpers.*
 import android.app.PendingIntent
 import android.content.ComponentName
-import android.os.Build
 
 /**
  * Implementation of App Widget functionality.

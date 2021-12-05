@@ -2,6 +2,7 @@ package com.cliambrown.easynoise
 
 import android.app.Activity
 import android.app.Service
+import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
@@ -15,10 +16,6 @@ import android.service.quicksettings.TileService
 import com.cliambrown.easynoise.helpers.*
 import android.widget.Toast
 import kotlin.math.roundToInt
-import android.content.ComponentName
-
-
-
 
 class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
 
@@ -232,12 +229,12 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
             wasPlaying = toPlaying
             getPrefs().edit().putBoolean("wasPlaying", toPlaying).apply()
         }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            TileService.requestListeningState(
-//                this,
-//                ComponentName(this, QSTileService::class.java.getName())
-//            )
-//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            TileService.requestListeningState(
+                this,
+                ComponentName(this, QSTileService::class.java.getName())
+            )
+        }
     }
 
     fun dismiss() {

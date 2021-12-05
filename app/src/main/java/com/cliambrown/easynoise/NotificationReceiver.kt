@@ -3,7 +3,6 @@ package com.cliambrown.easynoise
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import com.cliambrown.easynoise.helpers.*
 
 class NotificationReceiver : BroadcastReceiver() {

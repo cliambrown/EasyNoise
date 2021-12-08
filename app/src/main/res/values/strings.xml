@@ -16,6 +16,9 @@
     <string name="pause_during_calls">Pause during calls</string>
     <string name="load_error">"Error loading sound</string>
 
+    <string name="playing">Playing</string>
+    <string name="paused">Paused</string>
+
     <string name="fuzz" translatable="false">fuzz</string>
     <string name="gray">gray</string>
     <string name="gray_2">gray 2</string>

@@ -22,4 +22,6 @@
     <string name="pink">rose</string>
     <string name="brown">brun</string>
     <string name="blue">bleu</string>
+    <string name="paused">En pause</string>
+    <string name="playing">Joue</string>
 </resources>

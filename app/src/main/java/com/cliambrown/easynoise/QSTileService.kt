@@ -35,6 +35,13 @@ class QSTileService : TileService() {
         val resource = if (isPlaying) R.drawable.notification_icon else R.drawable.paused_notification_icon
         qsTile.setIcon(Icon.createWithResource(this, resource))
         qsTile.state = if (isPlaying) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+        val desc = if (isPlaying) getResources().getString(R.string.playing) else getResources().getString(R.string.paused)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            qsTile.setStateDescription(desc)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            qsTile.setSubtitle(desc)
+        }
         qsTile.updateTile()
     }
 }

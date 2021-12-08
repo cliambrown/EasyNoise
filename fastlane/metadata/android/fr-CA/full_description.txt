@@ -1,4 +1,4 @@
-La lecture se poursuit même sous d'autres sons. Comprend un widget de lecture/pause et sept options sonores.
+La lecture se poursuit même sous d'autres sons. Comprend un widget de lecture/pause, une tuile de configuration rapide et sept options sonores.
 
 Cette application ne contient aucune publicité ou traceur. Elle ne se connecte jamais à Internet. Elle ne garde en mémoire aucune donnée autre que le niveau de volume actuel et le son sélectionné.
 

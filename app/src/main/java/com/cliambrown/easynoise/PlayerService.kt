@@ -153,6 +153,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         if (soundPool == null) {
             val audioAttributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
                 .build()
             soundPool = SoundPool.Builder()
                 .setMaxStreams(1)

@@ -17,7 +17,7 @@
 * No ads or trackers of any kind
 * Free and open source
 * Continues playing even under other audio
-* Includes a play/pause widget, a Quick Settings tile ([instructions below](#quick-settings-tile-instructions)), and seven sound options
+* Includes a play/pause widget, a Quick Settings tile ([instructions below](#how-to-add-the-quick-settings-tile)), and seven sound options
 
 Made by [C. Liam Brown](https://cliambrown.com). Thanks to [j-m-hoffmann](https://github.com/j-m-hoffmann) for recent contributions.
 

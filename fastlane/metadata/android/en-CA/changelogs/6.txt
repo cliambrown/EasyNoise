@@ -1,0 +1,2 @@
+- Add Quick Settings tile (https://github.com/cliambrown/EasyNoise#how-to-add-the-quick-settings-tile)
+- Merge Pull Requests #2 and #3 (thanks j-m-hoffmann)

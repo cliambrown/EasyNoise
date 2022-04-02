@@ -1,0 +1,1 @@
+- Remplacer le bruit brun par une meilleure version (merci whym)

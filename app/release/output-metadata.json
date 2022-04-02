@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 6,
-      "versionName": "0.6",
-      "outputFile": "com.cliambrown.easynoise-v0.6-release.apk"
+      "versionCode": 7,
+      "versionName": "0.7",
+      "outputFile": "com.cliambrown.easynoise-v0.7-release.apk"
     }
   ],
   "elementType": "File"

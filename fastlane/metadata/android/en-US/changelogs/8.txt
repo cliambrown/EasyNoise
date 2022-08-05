@@ -1,1 +1,2 @@
 - Long-pressing the Quick Settings tile now opens the app
+- Create notification in PlayerService onCreate() method to avoid crashes

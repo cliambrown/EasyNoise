@@ -1,1 +1,2 @@
 - Une pression longue sur la tuile de configuration rapide ouvre désormais l'application.
+- Création de la notification dans la méthode PlayerService onCreate() pour éviter les pannes.

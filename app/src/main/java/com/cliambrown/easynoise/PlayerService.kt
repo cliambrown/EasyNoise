@@ -78,6 +78,7 @@ class PlayerService : Service(), SoundPool.OnLoadCompleteListener {
         filter.addAction(CONNECTION_STATE_CHANGED)
         filter.addAction(HEADSET_PLUG)
         registerReceiver(outsidePauseReceiver, filter)
+        createNotification(false)
         super.onCreate()
     }
 

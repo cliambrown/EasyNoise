@@ -1,0 +1,1 @@
+- Long-pressing the Quick Settings tile now opens the app

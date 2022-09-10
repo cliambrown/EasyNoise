@@ -1,6 +1,7 @@
 package com.cliambrown.easynoise
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -293,6 +294,7 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, Slider.OnChan
         volumeBar.setValue(volume.toFloat());
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
         prefs.edit().putInt("volume", value.toInt()).apply()
         if (serviceIsBound) playerService.updateVolume()

@@ -24,14 +24,15 @@ import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.view.animation.Animation.AnimationListener
 import android.view.animation.AccelerateDecelerateInterpolator
+import com.google.android.material.slider.Slider
 
-class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSeekBarChangeListener {
+class MainActivity : AppCompatActivity(), PlayerService.Callbacks, Slider.OnChangeListener {
 
     lateinit var showPermissionNoticeButton: ImageButton
     lateinit var permissionNotice: ConstraintLayout
     lateinit var playButton: ImageButton
     lateinit var pauseButton: ImageButton
-    lateinit var volumeBar: SeekBar
+    lateinit var volumeBar: Slider
     lateinit var noiseSpinner: Spinner
     lateinit var noises: Array<String>
     lateinit var prefs: SharedPreferences
@@ -72,12 +73,12 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
         playButton = findViewById(R.id.playButton) as ImageButton
         pauseButton = findViewById(R.id.pauseButton) as ImageButton
 
-        volumeBar = findViewById(R.id.volumeBar) as SeekBar
-        volumeBar.setOnSeekBarChangeListener(this)
+        volumeBar = findViewById(R.id.volumeBar) as Slider
+        volumeBar.addOnChangeListener(this)
         prefs = getSharedPreferences(applicationContext.packageName, 0)
         val volume = prefs.getInt("volume", 50)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            volumeBar.setProgress(volume, false)
+            volumeBar.setValue(volume.toFloat())
         }
 
         val noise = prefs.getString("noise", "fuzz")
@@ -289,23 +290,12 @@ class MainActivity : AppCompatActivity(), PlayerService.Callbacks, SeekBar.OnSee
 
     fun volumeChanged() {
         val volume = prefs.getInt("volume", 50)
-        volumeBar.setProgress(volume)
+        volumeBar.setValue(volume.toFloat());
     }
 
-    override fun onProgressChanged(
-        seekBar: SeekBar?, progress: Int,
-        fromUser: Boolean,
-    ) {
-        prefs.edit().putInt("volume", progress).apply()
+    override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
+        prefs.edit().putInt("volume", value.toInt()).apply()
         if (serviceIsBound) playerService.updateVolume()
-    }
-
-    override fun onStartTrackingTouch(seekBar: SeekBar?) {
-        // Needed for some reason
-    }
-
-    override fun onStopTrackingTouch(seekBar: SeekBar?) {
-        // Needed for some reason
     }
 
 }

@@ -1,0 +1,1 @@
+- Create notification in PlayerService onCreate() method to avoid crashes

@@ -1,7 +1,10 @@
 package com.cliambrown.easynoise
 
+import android.content.ComponentName
+import android.content.Intent
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.os.IBinder
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
@@ -22,6 +25,13 @@ class QSTileService : TileService() {
         } else {
             PlayerService.start(applicationContext, PAUSE)
         }
+    }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        TileService.requestListeningState(this,
+            ComponentName(this, QSTileService::class.java)
+        )
+        return super.onBind(intent)
     }
 
     override fun onStartListening() {

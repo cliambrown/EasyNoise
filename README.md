@@ -19,7 +19,9 @@
 * Continues playing even under other audio
 * Includes a play/pause widget, a Quick Settings tile ([instructions below](#how-to-add-the-quick-settings-tile)), and seven sound options
 
-Made by [C. Liam Brown](https://cliambrown.com). Thanks to [j-m-hoffmann](https://github.com/j-m-hoffmann) for recent contributions.
+Made by [C. Liam Brown](https://cliambrown.com).
+
+Contributors: [Nicolay Doytchev](https://github.com/lightrush), [Yusuke Matsubara](https://github.com/whym), [Johannes Hoffmann](https://github.com/j-m-hoffmann)
 
 ## Privacy & Permissions
 
@@ -47,7 +49,7 @@ The full privacy policy is available <a href="https://github.com/cliambrown/Easy
 1. Drag the tile up into your active tiles. **Note:** Only the first 6 tiles will appear in your menu (4 in Android 12 😠) — the rest will appear in an "overflow" menu that can be shown by expanding the menu and scrolling to one side.
 1. Click the "back" arrow at the top when you're finished arranging your menu.
 
-## Installation
+## Installation for development
 
 Clone the repo, open the project in Android Studio, hit "Run".
 

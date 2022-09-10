@@ -1,0 +1,1 @@
+- Remplacer Seekbar par Slider pour le rendre plus facile à saisir (merci Nicolay Doytchev)

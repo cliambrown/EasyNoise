@@ -1,0 +1,1 @@
+- Replace Seekbar with Slider to make it easier to pick up (thanks Nicolay Doytchev)

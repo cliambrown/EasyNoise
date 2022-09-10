@@ -1,0 +1,1 @@
+- Création de la notification dans la méthode PlayerService onCreate() pour éviter les pannes.
